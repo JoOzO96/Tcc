@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -72,9 +71,21 @@ class _ConsultaRowState extends State<ConsultaRow> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           new Container(height: 2.0),
-          new Text(widget.estrutura.structureId, style: headerTextStyle),
+          new Text(
+              widget.estrutura.structureId +
+                  " - Chain: " +
+                  widget.estrutura.chainId,
+              style: headerTextStyle),
           new Container(height: 10.0),
-          new Text("" + widget.estrutura.releaseDate.toString(),
+          new Text("Data publicação:" + widget.estrutura.releaseDate.toString(),
+              style: subHeaderTextStyle),
+          new Text("Tamanho Cadaeia:" + widget.estrutura.chainLength.toString(),
+              style: subHeaderTextStyle),
+          new Text("Classificação:" + widget.estrutura.classification.toString(),
+              style: subHeaderTextStyle),
+          new Text("Núm. de atomos:" + widget.estrutura.atomSiteCount.toString(),
+              style: subHeaderTextStyle),
+          new Text("Título da Estrutura:" + widget.estrutura.structureTitle.toString(),
               style: subHeaderTextStyle),
           new Container(
               margin: new EdgeInsets.symmetric(vertical: 8.0),
@@ -102,7 +113,7 @@ class _ConsultaRowState extends State<ConsultaRow> {
 
     final planetCard = new Container(
       child: planetCardContent,
-      width: MediaQuery.of(context).size.height / 4,
+      width: MediaQuery.of(context).size.height,
       height: MediaQuery.of(context).size.height,
       margin: new EdgeInsets.only(left: 1),
       decoration: new BoxDecoration(
