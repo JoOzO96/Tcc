@@ -114,7 +114,7 @@ class _ConsultaRowState extends State<ConsultaRow> {
     final planetCard = new Container(
       child: planetCardContent,
       width: MediaQuery.of(context).size.height,
-      height: MediaQuery.of(context).size.height,
+      height: 200,
       margin: new EdgeInsets.only(left: 1),
       decoration: new BoxDecoration(
         color: new Color(0xFF333366),
