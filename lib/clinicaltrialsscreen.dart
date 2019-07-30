@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ConsultaScreen extends StatefulWidget {
+class ClinicalTrialsScreen extends StatefulWidget {
   @override
-  ConsultaScreenState createState() => new ConsultaScreenState();
+  ClinicalTrialsScreenState createState() => new ClinicalTrialsScreenState();
 }
 
-class ConsultaScreenState extends State<ConsultaScreen> {
-
+class ClinicalTrialsScreenState extends State<ClinicalTrialsScreen> {
 
   @override
-  
-
+  void initState() {
+    super.initState();
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +19,10 @@ class ConsultaScreenState extends State<ConsultaScreen> {
         child: Scaffold(
           floatingActionButton: new FloatingActionButton(onPressed: () => Navigator.pushReplacementNamed(context, "/home"),),
       body: new Center(
-        
         child: new Column(
           children: <Widget>[
             new CircularProgressIndicator(),
-            new Text("Realizando consulta no PDB...")
+            new Text("Chegou")
           ],
         ),
       ),

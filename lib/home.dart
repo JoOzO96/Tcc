@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:unidb/Classes/Estrutura.dart';
+import 'package:unidb/Classes/Mensagens.dart';
 import 'package:unidb/Consulta_Row.dart';
+import 'package:unidb/Mensagens.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:xpath/xpath.dart';
 
@@ -26,7 +28,7 @@ class HomeScreenState extends State<HomeScreen> {
   bool consulta = false;
   bool consultaConcluida = false;
   var resposta = "";
-
+  List<Mensagem> teste = new List();
   List<Estrutura> itemsList = new List();
   parsing(xmlRecebido) {
     var document = xml.parse(xmlRecebido);
@@ -249,6 +251,8 @@ class HomeScreenState extends State<HomeScreen> {
 
       itemsList.add(estrutura);
     }).toList();
+
+
   }
 
   getValue(Iterable<xml.XmlElement> items) {
@@ -260,8 +264,9 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   realizaConsulta() async {
+    teste.clear();
     var url = "";
-    var response = null;
+    var response;
     if (pdb) {
       url = "https://www.rcsb.org/pdb/rest/customReport.xml?pdbids=" +
           _filter.text +
@@ -285,7 +290,7 @@ class HomeScreenState extends State<HomeScreen> {
         resposta = response.body;
         resposta = resposta.replaceAll("dimStructure.", "");
         resposta = resposta.replaceAll("dimEntity.", "");
-        print(resposta);
+        //print(resposta);
         parsing(resposta);
         setState(() {
           consultaConcluida = true;
@@ -298,8 +303,24 @@ class HomeScreenState extends State<HomeScreen> {
       }
     }
     if (clintrials) {
-      url = "https://clinicaltrials.gov/api/query/full_studies?expr=" + _;
+      url = "https://clinicaltrials.gov/api/query/full_studies?expr=" + _filter.text;
       response = await http.get(url);
+      if (response.statusCode == 200) {
+        resposta = response.body;
+        //print(resposta);
+        setState(() {
+          consultaConcluida = true;
+        });
+        Mensagem mensagem = new Mensagem();
+        mensagem.mensagem = "ClinicalTrials";
+        mensagem.numeroRetorno =  resposta.length.toString();
+        teste.add(mensagem);
+      } else {
+        setState(() {
+          consultaConcluida = false;
+        });
+        print("Request failed with status: ${response.statusCode}.");
+      }
     }
   }
 
@@ -356,7 +377,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     if (consulta && consultaConcluida) {
-      if (itemsList.length == 0) {
+      if (teste.length == 0) {
         consulta = false;
         consultaConcluida = false;
         return new Scaffold(
@@ -394,8 +415,10 @@ class HomeScreenState extends State<HomeScreen> {
                         mainAxisSpacing: 1,
                       ),
                       delegate: new SliverChildBuilderDelegate(
-                        (context, index) => new ConsultaRow(itemsList[index]),
-                        childCount: itemsList.length,
+                        (context, index) => 
+                        new Mensagens(teste[index]),
+                        // new ConsultaRow(itemsList[index]),
+                        childCount: teste.length,
                       ),
                     ),
                   ],
