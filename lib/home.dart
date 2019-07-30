@@ -12,6 +12,9 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   int _counter = 0;
+  bool pdb = false;
+  bool clintrials = false;
+  bool disgenet = false;
 
   final TextEditingController _filter = new TextEditingController();
   // final dio = new Dio(); // for http requests
@@ -19,7 +22,7 @@ class HomeScreenState extends State<HomeScreen> {
   List names = new List(); // names we get from API
   List filteredNames = new List(); // names filtered by search text
   Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('Buscar PDB ID');
+  Widget _appBarTitle = new Text('Digite sua pesquisa...');
   bool consulta = false;
   bool consultaConcluida = false;
   var resposta = "";
@@ -257,38 +260,46 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   realizaConsulta() async {
-    var url = "https://www.rcsb.org/pdb/rest/customReport.xml?pdbids=" +
-        _filter.text +
-        "&customReportColumns=atomSiteCount,structureAuthor,classification,depositionDate,experimentalTechnique,macromoleculeType,ndbId,pdbDoi,releaseDate,residueCount,resolution,revisionDate," +
-        "structureMolecularWeight,structureTitle,chainLength,db_name,entityId,entityMacromoleculeType,kabschSander,molecularWeight,sequence,InChI,InChIKey,ligandFormula,ligandId," +
-        "ligandMolecularWeight,ligandName,ligandSmiles,EC50,IC50,Ka,Kd,Ki,deltaG,deltaH,deltaS,hetId,biologicalProcess,cellularComponent,compound,ecNo,expressionHost," +
-        "molecularFunction,plasmid,source,taxonomyId,authorAssignedEntityName,clusterNumber100,clusterNumber30,clusterNumber40,clusterNumber50,clusterNumber70,clusterNumber90," +
-        "clusterNumber95,entityId,geneName,rankNumber100,rankNumber30,rankNumber40,rankNumber50,rankNumber70,rankNumber90,rankNumber95,synonym,taxonomy,taxonomyId,uniprotAcc," +
-        "uniprotAlternativeNames,uniprotRecommendedName,cathDescription,cathId,pfamAccession,pfamDescription,pfamId,scopDomain,scopFold,scopId,crystallizationMethod,crystallizationTempK," +
-        "densityMatthews,densityPercentSol,pdbxDetails,phValue,Z_PDB,lengthOfUnitCellLatticeA,lengthOfUnitCellLatticeB,lengthOfUnitCellLatticeC,spaceGroup,unitCellAngleAlpha," +
-        "unitCellAngleBeta,unitCellAngleGamma,collectionDate,collectionTemperature,device,diffractionSource,averageBFactor,rAll,rFree,rObserved,rWork,refinementResolution," +
-        "highResolutionLimit,reflectionsForRefinement,structureDeterminationMethod,name,version,fieldStrength,manufacturer,model,contents,ionicStrength,ph,pressure,pressureUnits," +
-        "solventSystem,temperature,type,conformerId,selectionCriteria,details,method,conformerSelectionCriteria,totalConformersCalculated,totalConformersSubmitted,emResolution," +
-        "emDiffractionResolution,reconstructionMethod,symmetryType,pointSymmetry,aggregationState,embedding,staining,vitrification,emdbMap,additionalMap,abstractTextShort,citationAuthor," +
-        "doi,firstPage,journalName,lastPage,meshTerms,pmc,publicationYear,pubmedId,title,volumeId,citationAuthor,firstPage,journalName,pmc,publicationYear,pubmedId,title,volumeId," +
-        "centerInitial,centerName,projectName&primaryOnly=1";
-    print(url);
-    // Await the http get response, then decode the json-formatted responce.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      resposta = response.body;
-      resposta = resposta.replaceAll("dimStructure.", "");
-      resposta = resposta.replaceAll("dimEntity.", "");
-      print(resposta);
-      parsing(resposta);
-      setState(() {
-        consultaConcluida = true;
-      });
-    } else {
-      setState(() {
-        consultaConcluida = false;
-      });
-      print("Request failed with status: ${response.statusCode}.");
+    var url = "";
+    var response = null;
+    if (pdb) {
+      url = "https://www.rcsb.org/pdb/rest/customReport.xml?pdbids=" +
+          _filter.text +
+          "&customReportColumns=atomSiteCount,structureAuthor,classification,depositionDate,experimentalTechnique,macromoleculeType,ndbId,pdbDoi,releaseDate,residueCount,resolution,revisionDate," +
+          "structureMolecularWeight,structureTitle,chainLength,db_name,entityId,entityMacromoleculeType,kabschSander,molecularWeight,sequence,InChI,InChIKey,ligandFormula,ligandId," +
+          "ligandMolecularWeight,ligandName,ligandSmiles,EC50,IC50,Ka,Kd,Ki,deltaG,deltaH,deltaS,hetId,biologicalProcess,cellularComponent,compound,ecNo,expressionHost," +
+          "molecularFunction,plasmid,source,taxonomyId,authorAssignedEntityName,clusterNumber100,clusterNumber30,clusterNumber40,clusterNumber50,clusterNumber70,clusterNumber90," +
+          "clusterNumber95,entityId,geneName,rankNumber100,rankNumber30,rankNumber40,rankNumber50,rankNumber70,rankNumber90,rankNumber95,synonym,taxonomy,taxonomyId,uniprotAcc," +
+          "uniprotAlternativeNames,uniprotRecommendedName,cathDescription,cathId,pfamAccession,pfamDescription,pfamId,scopDomain,scopFold,scopId,crystallizationMethod,crystallizationTempK," +
+          "densityMatthews,densityPercentSol,pdbxDetails,phValue,Z_PDB,lengthOfUnitCellLatticeA,lengthOfUnitCellLatticeB,lengthOfUnitCellLatticeC,spaceGroup,unitCellAngleAlpha," +
+          "unitCellAngleBeta,unitCellAngleGamma,collectionDate,collectionTemperature,device,diffractionSource,averageBFactor,rAll,rFree,rObserved,rWork,refinementResolution," +
+          "highResolutionLimit,reflectionsForRefinement,structureDeterminationMethod,name,version,fieldStrength,manufacturer,model,contents,ionicStrength,ph,pressure,pressureUnits," +
+          "solventSystem,temperature,type,conformerId,selectionCriteria,details,method,conformerSelectionCriteria,totalConformersCalculated,totalConformersSubmitted,emResolution," +
+          "emDiffractionResolution,reconstructionMethod,symmetryType,pointSymmetry,aggregationState,embedding,staining,vitrification,emdbMap,additionalMap,abstractTextShort,citationAuthor," +
+          "doi,firstPage,journalName,lastPage,meshTerms,pmc,publicationYear,pubmedId,title,volumeId,citationAuthor,firstPage,journalName,pmc,publicationYear,pubmedId,title,volumeId," +
+          "centerInitial,centerName,projectName&primaryOnly=1";
+      print(url);
+      // Await the http get response, then decode the json-formatted responce.
+      response = await http.get(url);
+      if (response.statusCode == 200) {
+        resposta = response.body;
+        resposta = resposta.replaceAll("dimStructure.", "");
+        resposta = resposta.replaceAll("dimEntity.", "");
+        print(resposta);
+        parsing(resposta);
+        setState(() {
+          consultaConcluida = true;
+        });
+      } else {
+        setState(() {
+          consultaConcluida = false;
+        });
+        print("Request failed with status: ${response.statusCode}.");
+      }
+    }
+    if (clintrials) {
+      url = "https://clinicaltrials.gov/api/query/full_studies?expr=" + _;
+      response = await http.get(url);
     }
   }
 
@@ -299,7 +310,7 @@ class HomeScreenState extends State<HomeScreen> {
         this._appBarTitle = new TextField(
           controller: _filter,
           decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search), hintText: 'PDB ID...'),
+              prefixIcon: new Icon(Icons.search), hintText: ''),
         );
       } else {
         if (_filter.text != "") {
@@ -407,7 +418,59 @@ class HomeScreenState extends State<HomeScreen> {
       return new Scaffold(
           appBar: _buildBar(context),
           body: new Column(
-            children: <Widget>[],
+            children: <Widget>[
+              new Text("Selecione os bancos de dados para serem consultados:"),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // [Monday] checkbox
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("DisgeNet"),
+                      Checkbox(
+                        value: disgenet,
+                        onChanged: (bool value) {
+                          setState(() {
+                            disgenet = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  // [Tuesday] checkbox
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("PDB"),
+                      Checkbox(
+                        value: pdb,
+                        onChanged: (bool value) {
+                          setState(() {
+                            pdb = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  // [Wednesday] checkbox
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("ClinTrials"),
+                      Checkbox(
+                        value: clintrials,
+                        onChanged: (bool value) {
+                          setState(() {
+                            clintrials = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ));
     }
   }
