@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:unidb/Classes/ClinicalTrials.dart';
+import 'package:unidb/Classes/Db.dart';
 import 'package:unidb/Classes/Estrutura.dart';
+import 'package:unidb/Classes/FullStudies.dart';
 import 'package:unidb/Classes/Mensagens.dart';
+import 'package:unidb/Classes/Post.dart';
 import 'package:unidb/Consulta_Row.dart';
 import 'package:unidb/Mensagens.dart';
 import 'package:xml/xml.dart' as xml;
@@ -251,8 +257,6 @@ class HomeScreenState extends State<HomeScreen> {
 
       itemsList.add(estrutura);
     }).toList();
-
-
   }
 
   getValue(Iterable<xml.XmlElement> items) {
@@ -303,17 +307,44 @@ class HomeScreenState extends State<HomeScreen> {
       }
     }
     if (clintrials) {
-      url = "https://clinicaltrials.gov/api/query/full_studies?expr=" + _filter.text;
+      url = "https://my-json-server.typicode.com/typicode/demo/db";
+
+      response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        resposta = response.body;
+        final data = jsonDecode(resposta);
+        for (Map i in data['posts']) {
+          var posts = Post.fromJson(i);
+          print(posts.id);
+        }
+      }
+
+      url = "https://clinicaltrials.gov/api/query/full_studies?expr=" +
+          _filter.text +
+          "&fmt=JSON&min_rnk=1&max_rnk=100";
+      print(url);
       response = await http.get(url);
       if (response.statusCode == 200) {
         resposta = response.body;
+        Map userMap = json.decode(resposta);
+        var testesClinicos = ClinicalTrials.fromJson(userMap['FullStudiesResponse']);
+
+        print('Howdy, ${testesClinicos.fullStudiesResponse.expression}, com um total de ${testesClinicos.fullStudiesResponse.nstudiesfound} estudos encontrados!');
+
+        
+
+        for (Map i in userMap['FullStudiesResponse']['FullStudies']){
+            print(FullStudies.fromJson(i).rank);
+        }
+
         //print(resposta);
         setState(() {
           consultaConcluida = true;
         });
         Mensagem mensagem = new Mensagem();
         mensagem.mensagem = "ClinicalTrials";
-        mensagem.numeroRetorno =  resposta.length.toString();
+        mensagem.numeroRetorno = resposta.length.toString();
         teste.add(mensagem);
       } else {
         setState(() {
@@ -415,8 +446,7 @@ class HomeScreenState extends State<HomeScreen> {
                         mainAxisSpacing: 1,
                       ),
                       delegate: new SliverChildBuilderDelegate(
-                        (context, index) => 
-                        new Mensagens(teste[index]),
+                        (context, index) => new Mensagens(teste[index]),
                         // new ConsultaRow(itemsList[index]),
                         childCount: teste.length,
                       ),

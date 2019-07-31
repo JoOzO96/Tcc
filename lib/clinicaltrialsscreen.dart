@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unidb/Classes/ClinicalTrials.dart';
 
 class ClinicalTrialsScreen extends StatefulWidget {
   @override
@@ -10,7 +11,6 @@ class ClinicalTrialsScreenState extends State<ClinicalTrialsScreen> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   @override
@@ -21,8 +21,8 @@ class ClinicalTrialsScreenState extends State<ClinicalTrialsScreen> {
       body: new Center(
         child: new Column(
           children: <Widget>[
-            new CircularProgressIndicator(),
-            new Text("Chegou")
+            
+
           ],
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:unidb/ClinicalTrials.dart';
+import 'package:unidb/clinicaltrialsscreen.dart';
 import 'package:unidb/consulta.dart';
 import 'package:unidb/home.dart';
 
