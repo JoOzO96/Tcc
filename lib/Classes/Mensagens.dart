@@ -1,4 +1,4 @@
 class Mensagem {
   String mensagem;
-  String numeroRetorno;
+  int numeroResultados;
 }

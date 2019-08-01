@@ -1,21 +1,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:unidb/Classes/Estrutura.dart';
-import 'package:unidb/Classes/Mensagens.dart';
+import 'package:unidb/Classes/ClinicalTrials/FullStudiesResponse.dart';
 
 class Mensagens extends StatefulWidget {
-  final Mensagem mensagem;
+  final FullStudiesResponse fullStudiesResponse;
 
-  Mensagens(this.mensagem);
+  Mensagens(this.fullStudiesResponse);
 
   @override
   _MensagensState createState() => _MensagensState();
 }
 
 class _MensagensState extends State<Mensagens> {
-  NumberFormat formatter = NumberFormat("0.00");
-  Icon _searchIcon = new Icon(Icons.search);
   bool segue = false;
 
   @override
@@ -36,30 +33,24 @@ class _MensagensState extends State<Mensagens> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           new Container(height: 2.0),
-          new Text("" + widget.mensagem.mensagem.toString(),
+          new Text("Versão API:" + widget.fullStudiesResponse.aPIVrs.toString(),
               style: subHeaderTextStyle),
-          new Text("" + widget.mensagem.numeroRetorno.toString(),
+          new Text("Buscando por:" + widget.fullStudiesResponse.expression,
               style: subHeaderTextStyle),
-          new IconButton(
-            icon: _searchIcon,
-            onPressed: () => criatela(widget.mensagem.mensagem),
-          ),
-          new Container(
-              margin: new EdgeInsets.symmetric(vertical: 8.0),
-              height: 2.0,
-              width: 18.0,
-              color: new Color(0xff00c6ff)),
-          new Row(
-            children: <Widget>[],
-          ),
+          new Text("Número de estudos disponívies:" + widget.fullStudiesResponse.nStudiesAvail.toString(),
+              style: subHeaderTextStyle),
+          new Text("Numero de estudos encontrados:" + widget.fullStudiesResponse.nStudiesFound.toString(),
+              style: subHeaderTextStyle),
+          new Text("Número de estudos retornados:" + widget.fullStudiesResponse.nStudiesReturned.toString(),
+              style: subHeaderTextStyle),
         ],
       ),
     );
 
     final planetCard = new Container(
       child: planetCardContent,
-      width: MediaQuery.of(context).size.height,
-      height: 200,
+      width: MediaQuery.of(context).size.width,
+      height: 110,
       margin: new EdgeInsets.only(left: 1),
       decoration: new BoxDecoration(
         color: new Color(0xFF333366),
@@ -76,7 +67,7 @@ class _MensagensState extends State<Mensagens> {
     );
 
     return new Container(
-        height: 120.0,
+        height: 1.0,
         margin: const EdgeInsets.symmetric(
           vertical: 16.0,
           horizontal: 16.0,
@@ -84,7 +75,6 @@ class _MensagensState extends State<Mensagens> {
         child: new Stack(
           children: <Widget>[
             planetCard,
-            // planetThumbnail,
           ],
         ));
   }

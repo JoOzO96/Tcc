@@ -2,16 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:unidb/Classes/ClinicalTrials.dart';
-import 'package:unidb/Classes/Db.dart';
+import 'package:unidb/Classes/ClinicalTrials/FullStudiesResponse.dart';
 import 'package:unidb/Classes/Estrutura.dart';
-import 'package:unidb/Classes/FullStudies.dart';
 import 'package:unidb/Classes/Mensagens.dart';
 import 'package:unidb/Classes/Post.dart';
-import 'package:unidb/Consulta_Row.dart';
 import 'package:unidb/Mensagens.dart';
 import 'package:xml/xml.dart' as xml;
-import 'package:xpath/xpath.dart';
+
+import 'clinicaltrialsscreen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -35,6 +33,7 @@ class HomeScreenState extends State<HomeScreen> {
   bool consultaConcluida = false;
   var resposta = "";
   List<Mensagem> teste = new List();
+  FullStudiesResponse testeClinico;
   List<Estrutura> itemsList = new List();
   parsing(xmlRecebido) {
     var document = xml.parse(xmlRecebido);
@@ -307,36 +306,16 @@ class HomeScreenState extends State<HomeScreen> {
       }
     }
     if (clintrials) {
-      url = "https://my-json-server.typicode.com/typicode/demo/db";
-
-      response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        resposta = response.body;
-        final data = jsonDecode(resposta);
-        for (Map i in data['posts']) {
-          var posts = Post.fromJson(i);
-          print(posts.id);
-        }
-      }
-
       url = "https://clinicaltrials.gov/api/query/full_studies?expr=" +
           _filter.text +
-          "&fmt=JSON&min_rnk=1&max_rnk=100";
-      print(url);
+          "&fmt=JSON&min_rnk=1&max_rnk=2";
       response = await http.get(url);
       if (response.statusCode == 200) {
         resposta = response.body;
         Map userMap = json.decode(resposta);
-        var testesClinicos = ClinicalTrials.fromJson(userMap['FullStudiesResponse']);
+        testeClinico = FullStudiesResponse.fromJson(userMap['FullStudiesResponse']);
 
-        print('Howdy, ${testesClinicos.fullStudiesResponse.expression}, com um total de ${testesClinicos.fullStudiesResponse.nstudiesfound} estudos encontrados!');
-
-        
-
-        for (Map i in userMap['FullStudiesResponse']['FullStudies']){
-            print(FullStudies.fromJson(i).rank);
-        }
+        // print('Howdy, ${testesClinicos.fullStudiesResponse.expression}, com um total de ${testesClinicos.fullStudiesResponse.nstudiesfound} estudos encontrados!');
 
         //print(resposta);
         setState(() {
@@ -344,7 +323,7 @@ class HomeScreenState extends State<HomeScreen> {
         });
         Mensagem mensagem = new Mensagem();
         mensagem.mensagem = "ClinicalTrials";
-        mensagem.numeroRetorno = resposta.length.toString();
+        mensagem.numeroResultados = testeClinico.nStudiesFound;
         teste.add(mensagem);
       } else {
         setState(() {
@@ -441,14 +420,34 @@ class HomeScreenState extends State<HomeScreen> {
                     new SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 1,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 1,
+                        mainAxisSpacing: 1,
+                      ),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) => new Mensagens(testeClinico),
+                        // new ConsultaRow(itemsList[index]),
+                        childCount: teste.length,
+                      ),
+                    ),
+                  ],
+                ))),
+                new Container(
+                    child: new Flexible(
+                        child: new CustomScrollView(
+                  scrollDirection: Axis.vertical,
+                  slivers: <Widget>[
+                    new SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
                         childAspectRatio: 2.0,
                         crossAxisSpacing: 1.0,
                         mainAxisSpacing: 1,
                       ),
                       delegate: new SliverChildBuilderDelegate(
-                        (context, index) => new Mensagens(teste[index]),
+                        (context, index) => new StudyCard(testeClinico.fullStudies[index]),
                         // new ConsultaRow(itemsList[index]),
-                        childCount: teste.length,
+                        childCount: testeClinico.fullStudies.length,
                       ),
                     ),
                   ],

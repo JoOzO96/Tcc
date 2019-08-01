@@ -1,19 +1,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:unidb/Classes/Estrutura.dart';
 import 'package:unidb/Classes/Mensagens.dart';
 
-class Mensagens extends StatefulWidget {
+class StatusConsulta extends StatefulWidget {
   final Mensagem mensagem;
 
-  Mensagens(this.mensagem);
+  StatusConsulta(this.mensagem);
 
   @override
-  _MensagensState createState() => _MensagensState();
+  _StatusConsultaState createState() => _StatusConsultaState();
 }
 
-class _MensagensState extends State<Mensagens> {
+class _StatusConsultaState extends State<StatusConsulta> {
   NumberFormat formatter = NumberFormat("0.00");
   Icon _searchIcon = new Icon(Icons.search);
   bool segue = false;
@@ -38,20 +37,8 @@ class _MensagensState extends State<Mensagens> {
           new Container(height: 2.0),
           new Text("" + widget.mensagem.mensagem.toString(),
               style: subHeaderTextStyle),
-          new Text("" + widget.mensagem.numeroRetorno.toString(),
+          new Text("" + widget.mensagem.numeroResultados.toString(),
               style: subHeaderTextStyle),
-          new IconButton(
-            icon: _searchIcon,
-            onPressed: () => criatela(widget.mensagem.mensagem),
-          ),
-          new Container(
-              margin: new EdgeInsets.symmetric(vertical: 8.0),
-              height: 2.0,
-              width: 18.0,
-              color: new Color(0xff00c6ff)),
-          new Row(
-            children: <Widget>[],
-          ),
         ],
       ),
     );

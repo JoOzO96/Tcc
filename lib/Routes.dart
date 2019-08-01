@@ -24,13 +24,6 @@ class Routes {
               settings: settings,
             );
         }
-        switch (settings.name) {
-            case '/clinicaltrialsscreen':
-            return new MyCustomRoute(
-              builder: (_) => new ClinicalTrialsScreen(),
-              settings: settings,
-            );
-        }
       },
     ));
   }
