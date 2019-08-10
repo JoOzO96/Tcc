@@ -313,7 +313,8 @@ class HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         resposta = response.body;
         Map userMap = json.decode(resposta);
-        testeClinico = FullStudiesResponse.fromJson(userMap['FullStudiesResponse']);
+        testeClinico =
+            FullStudiesResponse.fromJson(userMap['FullStudiesResponse']);
 
         // print('Howdy, ${testesClinicos.fullStudiesResponse.expression}, com um total de ${testesClinicos.fullStudiesResponse.nstudiesfound} estudos encontrados!');
 
@@ -420,39 +421,20 @@ class HomeScreenState extends State<HomeScreen> {
                     new SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 1,
-                        childAspectRatio: 1,
-                        crossAxisSpacing: 1,
-                        mainAxisSpacing: 1,
-                      ),
-                      delegate: new SliverChildBuilderDelegate(
-                        (context, index) => new Mensagens(testeClinico),
-                        // new ConsultaRow(itemsList[index]),
-                        childCount: teste.length,
-                      ),
-                    ),
-                  ],
-                ))),
-                new Container(
-                    child: new Flexible(
-                        child: new CustomScrollView(
-                  scrollDirection: Axis.vertical,
-                  slivers: <Widget>[
-                    new SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
                         childAspectRatio: 2.0,
                         crossAxisSpacing: 1.0,
                         mainAxisSpacing: 1,
                       ),
                       delegate: new SliverChildBuilderDelegate(
-                        (context, index) => new StudyCard(testeClinico.fullStudies[index]),
+                        (context, index) =>
+                            new StudyCard(testeClinico.fullStudies[index]),
                         // new ConsultaRow(itemsList[index]),
                         childCount: testeClinico.fullStudies.length,
                       ),
+                      
                     ),
                   ],
                 ))),
-                // new Text(resposta),
               ],
             ));
       }

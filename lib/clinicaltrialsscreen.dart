@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:unidb/Classes/ClinicalTrials/FullStudies.dart';
+import 'package:unidb/Classes/ClinicalTrials/Study.dart';
+import 'package:unidb/clinicalestudo.dart';
 
 class StudyCard extends StatefulWidget {
   final FullStudies study;
@@ -24,33 +26,67 @@ class _StudyCardState extends State<StudyCard> {
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
     final headerTextStyle = baseTextStyle.copyWith(
         color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600);
-
-    final planetCardContent = new Container(
-      margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
-      constraints: new BoxConstraints.expand(),
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Container(height: 2.0),
-           new Text("Resumo Título:" + widget.study.study.protocolSection.identificationModule.briefTitle,
-              style: subHeaderTextStyle),
-          
-          new Container(
-              margin: new EdgeInsets.symmetric(vertical: 8.0),
-              height: 2.0,
-              width: 18.0,
-              color: new Color(0xff00c6ff)),
-          new Row(
-            children: <Widget>[],
-          ),
-        ],
-      ),
-    );
+    var planetCardContent = new Container(
+        margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
+        constraints: new BoxConstraints.expand(),
+        child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[]));
+    if (widget.study.study.protocolSection.statusModule.lastKnownStatus !=
+        null) {
+      planetCardContent = new Container(
+        margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
+        constraints: new BoxConstraints.expand(),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Container(height: 2.0),
+            new Text(
+                "Resumo Título:" +
+                    widget.study.study.protocolSection.identificationModule
+                        .briefTitle,
+                style: subHeaderTextStyle),
+            new Text(
+                "Realizado por:" +
+                    widget.study.study.protocolSection.identificationModule
+                        .organization.orgFullName,
+                style: subHeaderTextStyle),
+            new Text(
+                "Status:" +
+                    widget.study.study.protocolSection.statusModule
+                        .lastKnownStatus,
+                style: subHeaderTextStyle),
+          ],
+        ),
+      );
+    } else {
+      planetCardContent = new Container(
+        margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
+        constraints: new BoxConstraints.expand(),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Container(height: 2.0),
+            new Text(
+                "Resumo Título:" +
+                    widget.study.study.protocolSection.identificationModule
+                        .briefTitle,
+                style: subHeaderTextStyle),
+            new Text(
+                "Realizado por:" +
+                    widget.study.study.protocolSection.identificationModule
+                        .organization.orgFullName,
+                style: subHeaderTextStyle),
+            new Text("Status: Não informado", style: subHeaderTextStyle),
+          ],
+        ),
+      );
+    }
 
     final planetCard = new Container(
       child: planetCardContent,
       width: MediaQuery.of(context).size.height,
-      height: 80,
+      height: 130,
       margin: new EdgeInsets.only(left: 1),
       decoration: new BoxDecoration(
         color: new Color(0xFA333366),
@@ -66,23 +102,20 @@ class _StudyCardState extends State<StudyCard> {
       ),
     );
 
-    return new Container(
-        height: 50.0,
-        margin: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 16.0,
-        ),
-        child: new Stack(
-          children: <Widget>[
-            planetCard,
-            // planetThumbnail,
-          ],
-        ));
+    return new GestureDetector(
+        child: Center(
+            child: Container(
+                height: 130,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 16.0,
+                ),
+                child: planetCard)),
+        onTap: () => criatela(widget.study.study));
   }
 
-  criatela(String mensagem) {
-    print(mensagem);
-    Navigator.pushReplacementNamed(
-        context, "/" + mensagem.toLowerCase() + "screen");
+  criatela(Study study) {
+    Navigator.pushReplacementNamed(context, "/clinicalestudo",
+        arguments: study);
   }
 }

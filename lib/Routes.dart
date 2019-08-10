@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:unidb/clinicaltrialsscreen.dart';
+import 'package:unidb/Classes/ClinicalTrials/Study.dart';
+import 'package:unidb/clinicalestudo.dart';
 import 'package:unidb/consulta.dart';
 import 'package:unidb/home.dart';
 
@@ -11,16 +12,23 @@ class Routes {
       home: new HomeScreen(),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
-            case '/consulta':
+          case '/consulta':
             return new MyCustomRoute(
               builder: (_) => new ConsultaScreen(),
               settings: settings,
             );
         }
         switch (settings.name) {
-            case '/home':
+          case '/home':
             return new MyCustomRoute(
               builder: (_) => new HomeScreen(),
+              settings: settings,
+            );
+        }
+        switch (settings.name) {
+          case '/clinicalestudo':
+            return new MyCustomRoute(
+              builder: (_) => new ClinicalEstudoScreen(settings.arguments),
               settings: settings,
             );
         }
