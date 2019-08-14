@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unidb/Classes/ClinicalTrials/StdAgeList.dart';
 import 'package:unidb/Classes/ClinicalTrials/Study.dart';
 import 'package:unidb/ClinicalTrials_Estudos.dart';
 
@@ -20,6 +21,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 15.0);
     String nomeParticipantes = "";
     String condicaoParticipantes = "";
+    String criteriosSelecao = "";
 
     if (widget.study.protocolSection.sponsorCollaboratorsModule
             .collaboratorList !=
@@ -43,8 +45,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
     if (widget.study.protocolSection.sponsorCollaboratorsModule
             .collaboratorList !=
         null) {
-      List<String> listCondicaoParticipantes = widget.study.protocolSection
-          .conditionsModule.conditionList.condition.toList();
+      List<String> listCondicaoParticipantes = widget
+          .study.protocolSection.conditionsModule.conditionList.condition
+          .toList();
       for (int i = 0; i < listCondicaoParticipantes.length; i++) {
         if ((i + 2) == listCondicaoParticipantes.length) {
           condicaoParticipantes +=
@@ -56,6 +59,37 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
       }
     } else {
       condicaoParticipantes = "Não informado.";
+    }
+
+    if (widget.study.protocolSection.eligibilityModule != null) {
+      criteriosSelecao += "\nVoluntários: " +
+          widget.study.protocolSection.eligibilityModule.healthyVolunteers;
+      criteriosSelecao +=
+          "\nSexo: " + widget.study.protocolSection.eligibilityModule.gender;
+      criteriosSelecao += "\nIdade minima: " +
+          widget.study.protocolSection.eligibilityModule.minimumAge;
+      criteriosSelecao += "\nIdade máxima: " +
+          widget.study.protocolSection.eligibilityModule.maximumAge;
+
+      if (widget.study.protocolSection.eligibilityModule.stdAgeList.stdAge !=
+          null) {
+        criteriosSelecao += "\n";
+        List<String> listIdade = widget
+            .study.protocolSection.eligibilityModule.stdAgeList.stdAge
+            .toList();
+        for (int i = 0; i < listIdade.length; i++) {
+          if ((i + 2) == listIdade.length) {
+            criteriosSelecao += listIdade.elementAt(i) + " e ";
+          } else {
+            criteriosSelecao += listIdade.elementAt(i) + ", ";
+          }
+        }
+      }
+
+      criteriosSelecao += "\n" +
+          widget.study.protocolSection.eligibilityModule.eligibilityCriteria;
+    } else {
+      criteriosSelecao = "\nNão informado.";
     }
 
     return new Scaffold(
@@ -84,8 +118,10 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     style: subHeaderTextStyle),
                 new Text(" "),
                 new Text(
-                    "Classificação para o estudo: " +
-                        condicaoParticipantes,
+                    "Classificação para o estudo: " + condicaoParticipantes,
+                    style: subHeaderTextStyle),
+                new Text(" "),
+                new Text("Critérios de seleção: " + criteriosSelecao,
                     style: subHeaderTextStyle),
               ],
             )));
