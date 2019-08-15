@@ -100,8 +100,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             color: Colors.white,
             child: new ListView(
               children: <Widget>[
-                new Image.asset('images/tutorialChannel.png',
-                    fit: BoxFit.cover),
+                
                 new Text(
                     "Título: " +
                         widget.study.protocolSection.identificationModule

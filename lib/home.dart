@@ -25,16 +25,298 @@ class HomeScreenState extends State<HomeScreen> {
   final TextEditingController _filter = new TextEditingController();
   // final dio = new Dio(); // for http requests
   String _searchText = "";
+  Widget _appBarTitle = new TextField(
+    decoration:
+        new InputDecoration( hintText: ''),
+  );
   List names = new List(); // names we get from API
   List filteredNames = new List(); // names filtered by search text
-  Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('Digite sua pesquisa...');
+  // Icon _searchIcon = new Icon(Icons.search);
+
   bool consulta = false;
   bool consultaConcluida = false;
   var resposta = "";
   List<Mensagem> teste = new List();
   FullStudiesResponse testeClinico;
   List<Estrutura> itemsList = new List();
+
+  getValue(Iterable<xml.XmlElement> items) {
+    var textValue;
+    items.map((xml.XmlElement node) {
+      textValue = node.text;
+    }).toList();
+    return textValue;
+  }
+
+  realizaConsulta() async {
+    teste.clear();
+    var url = "";
+    var response;
+    if (pdb) {
+      url = "https://www.rcsb.org/pdb/rest/customReport.xml?pdbids=" +
+          _filter.text +
+          "&customReportColumns=atomSiteCount,structureAuthor,classification,depositionDate,experimentalTechnique,macromoleculeType,ndbId,pdbDoi,releaseDate,residueCount,resolution,revisionDate," +
+          "structureMolecularWeight,structureTitle,chainLength,db_name,entityId,entityMacromoleculeType,kabschSander,molecularWeight,sequence,InChI,InChIKey,ligandFormula,ligandId," +
+          "ligandMolecularWeight,ligandName,ligandSmiles,EC50,IC50,Ka,Kd,Ki,deltaG,deltaH,deltaS,hetId,biologicalProcess,cellularComponent,compound,ecNo,expressionHost," +
+          "molecularFunction,plasmid,source,taxonomyId,authorAssignedEntityName,clusterNumber100,clusterNumber30,clusterNumber40,clusterNumber50,clusterNumber70,clusterNumber90," +
+          "clusterNumber95,entityId,geneName,rankNumber100,rankNumber30,rankNumber40,rankNumber50,rankNumber70,rankNumber90,rankNumber95,synonym,taxonomy,taxonomyId,uniprotAcc," +
+          "uniprotAlternativeNames,uniprotRecommendedName,cathDescription,cathId,pfamAccession,pfamDescription,pfamId,scopDomain,scopFold,scopId,crystallizationMethod,crystallizationTempK," +
+          "densityMatthews,densityPercentSol,pdbxDetails,phValue,Z_PDB,lengthOfUnitCellLatticeA,lengthOfUnitCellLatticeB,lengthOfUnitCellLatticeC,spaceGroup,unitCellAngleAlpha," +
+          "unitCellAngleBeta,unitCellAngleGamma,collectionDate,collectionTemperature,device,diffractionSource,averageBFactor,rAll,rFree,rObserved,rWork,refinementResolution," +
+          "highResolutionLimit,reflectionsForRefinement,structureDeterminationMethod,name,version,fieldStrength,manufacturer,model,contents,ionicStrength,ph,pressure,pressureUnits," +
+          "solventSystem,temperature,type,conformerId,selectionCriteria,details,method,conformerSelectionCriteria,totalConformersCalculated,totalConformersSubmitted,emResolution," +
+          "emDiffractionResolution,reconstructionMethod,symmetryType,pointSymmetry,aggregationState,embedding,staining,vitrification,emdbMap,additionalMap,abstractTextShort,citationAuthor," +
+          "doi,firstPage,journalName,lastPage,meshTerms,pmc,publicationYear,pubmedId,title,volumeId,citationAuthor,firstPage,journalName,pmc,publicationYear,pubmedId,title,volumeId," +
+          "centerInitial,centerName,projectName&primaryOnly=1";
+      print(url);
+      // Await the http get response, then decode the json-formatted responce.
+      response = await http.get(url);
+      if (response.statusCode == 200) {
+        resposta = response.body;
+        resposta = resposta.replaceAll("dimStructure.", "");
+        resposta = resposta.replaceAll("dimEntity.", "");
+        //print(resposta);
+        parsing(resposta);
+        setState(() {
+          consultaConcluida = true;
+        });
+      } else {
+        setState(() {
+          consultaConcluida = false;
+        });
+        print("Request failed with status: ${response.statusCode}.");
+      }
+    }
+    if (clintrials) {
+      url = "https://clinicaltrials.gov/api/query/full_studies?expr=" +
+          _filter.text +
+          "&fmt=JSON&min_rnk=1&max_rnk=2";
+      response = await http.get(url);
+      if (response.statusCode == 200) {
+        resposta = response.body;
+        Map userMap = json.decode(resposta);
+        testeClinico =
+            FullStudiesResponse.fromJson(userMap['FullStudiesResponse']);
+
+        // print('Howdy, ${testesClinicos.fullStudiesResponse.expression}, com um total de ${testesClinicos.fullStudiesResponse.nstudiesfound} estudos encontrados!');
+
+        //print(resposta);
+        setState(() {
+          consultaConcluida = true;
+        });
+        Mensagem mensagem = new Mensagem();
+        mensagem.mensagem = "ClinicalTrials";
+        mensagem.numeroResultados = testeClinico.nStudiesFound;
+        teste.add(mensagem);
+      } else {
+        setState(() {
+          consultaConcluida = false;
+        });
+        print("Request failed with status: ${response.statusCode}.");
+      }
+    }
+  }
+
+  void _searchPressed() {
+    setState(() {
+      // if (this._searchIcon.icon == Icons.search) {
+      //   this._searchIcon = new Icon(Icons.send);
+      //   this._appBarTitle = new TextField(
+      //     controller: _filter,
+      //     decoration: new InputDecoration(
+      //         prefixIcon: new Icon(Icons.search), hintText: ''),
+      //   );
+      // } else {
+        if (_filter.text != "") {
+          itemsList.clear();
+          setState(() {
+            consulta = true;
+            realizaConsulta();
+          });
+        } else {
+          setState(() {
+            consultaConcluida = false;
+            consulta = false;
+          });
+          this._appBarTitle = new TextField(
+            controller: _filter,
+            decoration: new InputDecoration(
+                prefixIcon: new Icon(Icons.search), hintText: ''),
+          );
+          filteredNames = names;
+          _filter.clear();
+        // }
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (consulta) {
+      realizaConsulta();
+    }
+  }
+
+  Widget _buildBar(BuildContext context) {
+    return new AppBar(
+      centerTitle: true,
+      title: _appBarTitle,
+      leading: new IconButton(
+        icon: new Icon(Icons.search),
+        onPressed: () => _searchPressed(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (consulta && consultaConcluida) {
+      if (teste.length == 0) {
+        consulta = false;
+        consultaConcluida = false;
+        return new Scaffold(
+          appBar: _buildBar(context),
+          body: Center(
+            child: new Column(
+              children: <Widget>[
+                new Row(
+                  children: <Widget>[
+                    new Icon(Icons.error),
+                    new Text("Erro ao consultar dados...."),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      } else {
+        consulta = false;
+        consultaConcluida = false;
+        return new Scaffold(
+            appBar: _buildBar(context),
+            body: new Column(
+              children: <Widget>[
+                new Container(
+                    child: new Flexible(
+                        child: new CustomScrollView(
+                  scrollDirection: Axis.vertical,
+                  slivers: <Widget>[
+                    new SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        childAspectRatio: 2.0,
+                        crossAxisSpacing: 1.0,
+                        mainAxisSpacing: 1,
+                      ),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new StudyCard(testeClinico.fullStudies[index]),
+                        // new ConsultaRow(itemsList[index]),
+                        childCount: testeClinico.fullStudies.length,
+                      ),
+                    ),
+                  ],
+                ))),
+              ],
+            ));
+      }
+    } else if (consulta == true && consultaConcluida == false) {
+      return new Scaffold(
+          appBar: _buildBar(context),
+          body: new Center(
+              child: new Column(
+            children: <Widget>[
+              new CircularProgressIndicator(),
+              new Text("Realizando consulta nos bancos de dados..."),
+            ],
+          )));
+    } else {
+      return new Scaffold(
+          appBar: _buildBar(context),
+          body: new Column(
+            children: <Widget>[
+              new Text("Selecione os bancos de dados para serem consultados:"),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // [Monday] checkbox
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("DisgeNet"),
+                      Checkbox(
+                        value: disgenet,
+                        onChanged: (bool value) {
+                          setState(() {
+                            disgenet = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  // [Tuesday] checkbox
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("PDB"),
+                      Checkbox(
+                        value: pdb,
+                        onChanged: (bool value) {
+                          setState(() {
+                            pdb = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  // [Wednesday] checkbox
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("ClinTrials"),
+                      Checkbox(
+                        value: clintrials,
+                        onChanged: (bool value) {
+                          setState(() {
+                            clintrials = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ));
+    }
+  }
+
+  // @override
+  // List<Widget> buildActions(BuildContext context) {
+  //   // TODO: implement buildActions
+  //   return null;
+  // }
+
+  // @override
+  // Widget buildLeading(BuildContext context) {
+  //   // TODO: implement buildLeading
+  //   return null;
+  // }
+
+  // @override
+  // Widget buildResults(BuildContext context) {
+  //   // TODO: implement buildResults
+  //   return null;
+  // }
+
+  // @override
+  // Widget buildSuggestions(BuildContext context) {
+  //   // TODO: implement buildSuggestions
+  //   return null;
+  // }
+
   parsing(xmlRecebido) {
     var document = xml.parse(xmlRecebido);
     //print(document.toString());
@@ -257,279 +539,4 @@ class HomeScreenState extends State<HomeScreen> {
       itemsList.add(estrutura);
     }).toList();
   }
-
-  getValue(Iterable<xml.XmlElement> items) {
-    var textValue;
-    items.map((xml.XmlElement node) {
-      textValue = node.text;
-    }).toList();
-    return textValue;
-  }
-
-  realizaConsulta() async {
-    teste.clear();
-    var url = "";
-    var response;
-    if (pdb) {
-      url = "https://www.rcsb.org/pdb/rest/customReport.xml?pdbids=" +
-          _filter.text +
-          "&customReportColumns=atomSiteCount,structureAuthor,classification,depositionDate,experimentalTechnique,macromoleculeType,ndbId,pdbDoi,releaseDate,residueCount,resolution,revisionDate," +
-          "structureMolecularWeight,structureTitle,chainLength,db_name,entityId,entityMacromoleculeType,kabschSander,molecularWeight,sequence,InChI,InChIKey,ligandFormula,ligandId," +
-          "ligandMolecularWeight,ligandName,ligandSmiles,EC50,IC50,Ka,Kd,Ki,deltaG,deltaH,deltaS,hetId,biologicalProcess,cellularComponent,compound,ecNo,expressionHost," +
-          "molecularFunction,plasmid,source,taxonomyId,authorAssignedEntityName,clusterNumber100,clusterNumber30,clusterNumber40,clusterNumber50,clusterNumber70,clusterNumber90," +
-          "clusterNumber95,entityId,geneName,rankNumber100,rankNumber30,rankNumber40,rankNumber50,rankNumber70,rankNumber90,rankNumber95,synonym,taxonomy,taxonomyId,uniprotAcc," +
-          "uniprotAlternativeNames,uniprotRecommendedName,cathDescription,cathId,pfamAccession,pfamDescription,pfamId,scopDomain,scopFold,scopId,crystallizationMethod,crystallizationTempK," +
-          "densityMatthews,densityPercentSol,pdbxDetails,phValue,Z_PDB,lengthOfUnitCellLatticeA,lengthOfUnitCellLatticeB,lengthOfUnitCellLatticeC,spaceGroup,unitCellAngleAlpha," +
-          "unitCellAngleBeta,unitCellAngleGamma,collectionDate,collectionTemperature,device,diffractionSource,averageBFactor,rAll,rFree,rObserved,rWork,refinementResolution," +
-          "highResolutionLimit,reflectionsForRefinement,structureDeterminationMethod,name,version,fieldStrength,manufacturer,model,contents,ionicStrength,ph,pressure,pressureUnits," +
-          "solventSystem,temperature,type,conformerId,selectionCriteria,details,method,conformerSelectionCriteria,totalConformersCalculated,totalConformersSubmitted,emResolution," +
-          "emDiffractionResolution,reconstructionMethod,symmetryType,pointSymmetry,aggregationState,embedding,staining,vitrification,emdbMap,additionalMap,abstractTextShort,citationAuthor," +
-          "doi,firstPage,journalName,lastPage,meshTerms,pmc,publicationYear,pubmedId,title,volumeId,citationAuthor,firstPage,journalName,pmc,publicationYear,pubmedId,title,volumeId," +
-          "centerInitial,centerName,projectName&primaryOnly=1";
-      print(url);
-      // Await the http get response, then decode the json-formatted responce.
-      response = await http.get(url);
-      if (response.statusCode == 200) {
-        resposta = response.body;
-        resposta = resposta.replaceAll("dimStructure.", "");
-        resposta = resposta.replaceAll("dimEntity.", "");
-        //print(resposta);
-        parsing(resposta);
-        setState(() {
-          consultaConcluida = true;
-        });
-      } else {
-        setState(() {
-          consultaConcluida = false;
-        });
-        print("Request failed with status: ${response.statusCode}.");
-      }
-    }
-    if (clintrials) {
-      url = "https://clinicaltrials.gov/api/query/full_studies?expr=" +
-          _filter.text +
-          "&fmt=JSON&min_rnk=1&max_rnk=2";
-      response = await http.get(url);
-      if (response.statusCode == 200) {
-        resposta = response.body;
-        Map userMap = json.decode(resposta);
-        testeClinico =
-            FullStudiesResponse.fromJson(userMap['FullStudiesResponse']);
-
-        // print('Howdy, ${testesClinicos.fullStudiesResponse.expression}, com um total de ${testesClinicos.fullStudiesResponse.nstudiesfound} estudos encontrados!');
-
-        //print(resposta);
-        setState(() {
-          consultaConcluida = true;
-        });
-        Mensagem mensagem = new Mensagem();
-        mensagem.mensagem = "ClinicalTrials";
-        mensagem.numeroResultados = testeClinico.nStudiesFound;
-        teste.add(mensagem);
-      } else {
-        setState(() {
-          consultaConcluida = false;
-        });
-        print("Request failed with status: ${response.statusCode}.");
-      }
-    }
-  }
-
-  void _searchPressed() {
-    setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(Icons.send);
-        this._appBarTitle = new TextField(
-          controller: _filter,
-          decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search), hintText: ''),
-        );
-      } else {
-        if (_filter.text != "") {
-          itemsList.clear();
-          setState(() {
-            consulta = true;
-            realizaConsulta();
-          });
-        } else {
-          setState(() {
-            consultaConcluida = false;
-            consulta = false;
-          });
-          this._searchIcon = new Icon(Icons.search);
-          this._appBarTitle = new Text('Buscar PDB ID');
-          filteredNames = names;
-          _filter.clear();
-        }
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (consulta) {
-      realizaConsulta();
-    }
-  }
-
-  Widget _buildBar(BuildContext context) {
-    return new AppBar(
-      centerTitle: true,
-      title: _appBarTitle,
-      leading: new IconButton(
-        icon: _searchIcon,
-        onPressed: () => _searchPressed(),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (consulta && consultaConcluida) {
-      if (teste.length == 0) {
-        consulta = false;
-        consultaConcluida = false;
-        return new Scaffold(
-          appBar: _buildBar(context),
-          body: Center(
-            child: new Column(
-              children: <Widget>[
-                new Row(
-                  children: <Widget>[
-                    new Icon(Icons.error),
-                    new Text("Erro ao consultar dados...."),
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
-      } else {
-        consulta = false;
-        consultaConcluida = false;
-        return new Scaffold(
-            appBar: _buildBar(context),
-            body: new Column(
-              children: <Widget>[
-                new Container(
-                    child: new Flexible(
-                        child: new CustomScrollView(
-                  scrollDirection: Axis.vertical,
-                  slivers: <Widget>[
-                    new SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        childAspectRatio: 2.0,
-                        crossAxisSpacing: 1.0,
-                        mainAxisSpacing: 1,
-                      ),
-                      delegate: new SliverChildBuilderDelegate(
-                        (context, index) =>
-                            new StudyCard(testeClinico.fullStudies[index]),
-                        // new ConsultaRow(itemsList[index]),
-                        childCount: testeClinico.fullStudies.length,
-                      ),
-                      
-                    ),
-                  ],
-                ))),
-              ],
-            ));
-      }
-    } else if (consulta == true && consultaConcluida == false) {
-      return new Scaffold(
-          appBar: _buildBar(context),
-          body: new Center(
-              child: new Column(
-            children: <Widget>[
-              new CircularProgressIndicator(),
-              new Text("Realizando consulta nos bancos de dados..."),
-            ],
-          )));
-    } else {
-      return new Scaffold(
-          appBar: _buildBar(context),
-          body: new Column(
-            children: <Widget>[
-              new Text("Selecione os bancos de dados para serem consultados:"),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // [Monday] checkbox
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("DisgeNet"),
-                      Checkbox(
-                        value: disgenet,
-                        onChanged: (bool value) {
-                          setState(() {
-                            disgenet = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  // [Tuesday] checkbox
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("PDB"),
-                      Checkbox(
-                        value: pdb,
-                        onChanged: (bool value) {
-                          setState(() {
-                            pdb = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  // [Wednesday] checkbox
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("ClinTrials"),
-                      Checkbox(
-                        value: clintrials,
-                        onChanged: (bool value) {
-                          setState(() {
-                            clintrials = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ));
-    }
-  }
-
-  // @override
-  // List<Widget> buildActions(BuildContext context) {
-  //   // TODO: implement buildActions
-  //   return null;
-  // }
-
-  // @override
-  // Widget buildLeading(BuildContext context) {
-  //   // TODO: implement buildLeading
-  //   return null;
-  // }
-
-  // @override
-  // Widget buildResults(BuildContext context) {
-  //   // TODO: implement buildResults
-  //   return null;
-  // }
-
-  // @override
-  // Widget buildSuggestions(BuildContext context) {
-  //   // TODO: implement buildSuggestions
-  //   return null;
-  // }
 }
