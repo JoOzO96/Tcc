@@ -1,12 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:unidb/Classes/ClinicalTrials/FullStudiesResponse.dart';
 import 'package:unidb/Classes/Estrutura.dart';
 import 'package:unidb/Classes/Mensagens.dart';
-import 'package:unidb/Classes/Post.dart';
-import 'package:unidb/Mensagens.dart';
 import 'package:xml/xml.dart' as xml;
 
 import 'clinicaltrialsscreen.dart';
@@ -26,8 +25,7 @@ class HomeScreenState extends State<HomeScreen> {
   // final dio = new Dio(); // for http requests
   String _searchText = "";
   Widget _appBarTitle = new TextField(
-    decoration:
-        new InputDecoration( hintText: ''),
+    decoration: new InputDecoration(hintText: ''),
   );
   List names = new List(); // names we get from API
   List filteredNames = new List(); // names filtered by search text
@@ -91,7 +89,11 @@ class HomeScreenState extends State<HomeScreen> {
       url = "https://clinicaltrials.gov/api/query/full_studies?expr=" +
           _filter.text +
           "&fmt=JSON&min_rnk=1&max_rnk=2";
-      response = await http.get(url);
+
+      response = await http.get(url).catchError((e) => setState(() {
+            consultaConcluida = false;
+            consulta = false;
+          }));;
       if (response.statusCode == 200) {
         resposta = response.body;
         Map userMap = json.decode(resposta);
@@ -127,24 +129,26 @@ class HomeScreenState extends State<HomeScreen> {
       //         prefixIcon: new Icon(Icons.search), hintText: ''),
       //   );
       // } else {
-        if (_filter.text != "") {
-          itemsList.clear();
-          setState(() {
-            consulta = true;
-            realizaConsulta();
-          });
-        } else {
-          setState(() {
-            consultaConcluida = false;
-            consulta = false;
-          });
-          this._appBarTitle = new TextField(
-            controller: _filter,
-            decoration: new InputDecoration(
-                prefixIcon: new Icon(Icons.search), hintText: ''),
-          );
-          filteredNames = names;
-          _filter.clear();
+      if (_filter.text != "") {
+        itemsList.clear();
+        setState(() {
+          consulta = true;
+          realizaConsulta();
+        });
+      } else {
+        setState(() {
+          consultaConcluida = false;
+          consulta = false;
+        });
+
+        // });
+        // this._appBarTitle = new TextField(
+        //   controller: _filter,
+        //   decoration: new InputDecoration(
+        //       prefixIcon: new Icon(Icons.search), hintText: ''),
+        // );
+        // filteredNames = names;
+        _filter.clear();
         // }
       }
     });
@@ -162,7 +166,10 @@ class HomeScreenState extends State<HomeScreen> {
   Widget _buildBar(BuildContext context) {
     return new AppBar(
       centerTitle: true,
-      title: _appBarTitle,
+      title: new TextField(
+        controller: _filter,
+        decoration: new InputDecoration(hintText: 'Digite a busca...'),
+      ),
       leading: new IconButton(
         icon: new Icon(Icons.search),
         onPressed: () => _searchPressed(),

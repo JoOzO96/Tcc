@@ -18,7 +18,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
     final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
     final regularTextStyle = baseTextStyle.copyWith(
         color: Colors.black87, fontSize: 9.0, fontWeight: FontWeight.w400);
-    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 15.0);
+    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 20.0);
     String nomeParticipantes = "";
     String condicaoParticipantes = "";
     String criteriosSelecao = "";
@@ -62,15 +62,23 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
     }
 
     if (widget.study.protocolSection.eligibilityModule != null) {
-      criteriosSelecao += "\nVoluntários: " +
-          widget.study.protocolSection.eligibilityModule.healthyVolunteers;
-      criteriosSelecao +=
-          "\nSexo: " + widget.study.protocolSection.eligibilityModule.gender;
-      criteriosSelecao += "\nIdade minima: " +
-          widget.study.protocolSection.eligibilityModule.minimumAge;
-      criteriosSelecao += "\nIdade máxima: " +
-          widget.study.protocolSection.eligibilityModule.maximumAge;
-
+      if (widget.study.protocolSection.eligibilityModule.healthyVolunteers !=
+          null) {
+        criteriosSelecao += "\nVoluntários: " +
+            widget.study.protocolSection.eligibilityModule.healthyVolunteers;
+      }
+      if (widget.study.protocolSection.eligibilityModule.gender != null) {
+        criteriosSelecao +=
+            "\nSexo: " + widget.study.protocolSection.eligibilityModule.gender;
+      }
+      if (widget.study.protocolSection.eligibilityModule.minimumAge != null) {
+        criteriosSelecao += "\nIdade minima: " +
+            widget.study.protocolSection.eligibilityModule.minimumAge;
+      }
+      if (widget.study.protocolSection.eligibilityModule.maximumAge != null) {
+        criteriosSelecao += "\nIdade máxima: " +
+            widget.study.protocolSection.eligibilityModule.maximumAge;
+      }
       if (widget.study.protocolSection.eligibilityModule.stdAgeList.stdAge !=
           null) {
         criteriosSelecao += "\n";
@@ -85,22 +93,24 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
           }
         }
       }
-
-      criteriosSelecao += "\n" +
-          widget.study.protocolSection.eligibilityModule.eligibilityCriteria;
+      if (widget.study.protocolSection.eligibilityModule.eligibilityCriteria !=
+          null) {
+        criteriosSelecao += "\n" +
+            widget.study.protocolSection.eligibilityModule.eligibilityCriteria;
+      }
     } else {
       criteriosSelecao = "\nNão informado.";
     }
 
     return new Scaffold(
         floatingActionButton: new FloatingActionButton(
+          
           onPressed: () => Navigator.pushReplacementNamed(context, "/home"),
         ),
         body: new Container(
             color: Colors.white,
             child: new ListView(
               children: <Widget>[
-                
                 new Text(
                     "Título: " +
                         widget.study.protocolSection.identificationModule
