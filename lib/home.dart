@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
 import 'package:unidb/Classes/ClinicalTrials/FullStudiesResponse.dart';
 import 'package:unidb/Classes/Estrutura.dart';
@@ -263,22 +265,6 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  // [Tuesday] checkbox
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("PDB"),
-                      Checkbox(
-                        value: pdb,
-                        onChanged: (bool value) {
-                          setState(() {
-                            pdb = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  // [Wednesday] checkbox
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -293,6 +279,7 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+                  IconButton(icon: Icon(Icons.search), onPressed: () => _criaTicketDisgenet(),)
                 ],
               ),
             ],
