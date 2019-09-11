@@ -323,7 +323,25 @@ class HomeScreenState extends State<HomeScreen> {
   //   // TODO: implement buildSuggestions
   //   return null;
   // }
+  _criaTicketDisgenet() async {
+    var response;
 
+    response = await http.post("https://utslogin.nlm.nih.gov/cas/v1/tickets",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: "username=josealcides&password=Alcides%40jose1",
+        encoding: Encoding.getByName("utf-8"));
+    if (response.statusCode == 201) {
+      dom.Document document = parser.parse(response.body);
+      var tgt = document.body.nodes.elementAt(1).attributes.values.elementAt(0);
+      response = await http.post(tgt,
+          headers: {"Content-Type": "application/x-www-form-urlencoded"},
+          body: "service=http://umlsks.nlm.nih.gov",
+          encoding: Encoding.getByName("utf-8"));
+      var ticket = response.body;
+      response = await http.get("https://uts-ws.nlm.nih.gov/rest/search/current?string=asthma&ticket=" + ticket);
+      print(response.body);
+    }
+  }
   parsing(xmlRecebido) {
     var document = xml.parse(xmlRecebido);
     //print(document.toString());
