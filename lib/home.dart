@@ -1,9 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
 import 'package:unidb/Classes/ClinicalTrials/FullStudiesResponse.dart';
 import 'package:unidb/Classes/Estrutura.dart';
@@ -95,7 +91,8 @@ class HomeScreenState extends State<HomeScreen> {
       response = await http.get(url).catchError((e) => setState(() {
             consultaConcluida = false;
             consulta = false;
-          }));;
+          }));
+      ;
       if (response.statusCode == 200) {
         resposta = response.body;
         Map userMap = json.decode(resposta);
@@ -118,6 +115,12 @@ class HomeScreenState extends State<HomeScreen> {
         });
         print("Request failed with status: ${response.statusCode}.");
       }
+    }
+    if (!pdb && !clintrials) {
+      setState(() {
+        consultaConcluida = false;
+        consulta = false;
+      });
     }
   }
 
@@ -279,7 +282,6 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  IconButton(icon: Icon(Icons.search), onPressed: () => _criaTicketDisgenet(),)
                 ],
               ),
             ],
@@ -310,25 +312,7 @@ class HomeScreenState extends State<HomeScreen> {
   //   // TODO: implement buildSuggestions
   //   return null;
   // }
-  _criaTicketDisgenet() async {
-    var response;
 
-    response = await http.post("https://utslogin.nlm.nih.gov/cas/v1/tickets",
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: "username=josealcides&password=Alcides%40jose1",
-        encoding: Encoding.getByName("utf-8"));
-    if (response.statusCode == 201) {
-      dom.Document document = parser.parse(response.body);
-      var tgt = document.body.nodes.elementAt(1).attributes.values.elementAt(0);
-      response = await http.post(tgt,
-          headers: {"Content-Type": "application/x-www-form-urlencoded"},
-          body: "service=http://umlsks.nlm.nih.gov",
-          encoding: Encoding.getByName("utf-8"));
-      var ticket = response.body;
-      response = await http.get("https://uts-ws.nlm.nih.gov/rest/search/current?string=asthma&ticket=" + ticket);
-      print(response.body);
-    }
-  }
   parsing(xmlRecebido) {
     var document = xml.parse(xmlRecebido);
     //print(document.toString());

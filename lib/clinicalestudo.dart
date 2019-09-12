@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:unidb/Classes/ClinicalTrials/StdAgeList.dart';
-import 'package:unidb/Classes/ClinicalTrials/Study.dart';
-import 'package:unidb/ClinicalTrials_Estudos.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as parser;
+import 'package:unidb/Classes/ClinicalTrials/Study.dart';
 import 'Classes/ClinicalTrials/Collaborator.dart';
+import 'package:http/http.dart' as http;
 
 class ClinicalEstudoScreen extends StatefulWidget {
   final Study study;
@@ -22,6 +24,48 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
     String nomeParticipantes = "";
     String condicaoParticipantes = "";
     String criteriosSelecao = "";
+    String dadosDisgenet = "";
+    @override
+    void initState() {
+      super.initState();
+    }
+
+    criaTicketDisgenet(String doenca) async {
+      var response;
+
+      response = await http.post("https://utslogin.nlm.nih.gov/cas/v1/tickets",
+          headers: {"Content-Type": "application/x-www-form-urlencoded"},
+          body: "username=josealcides&password=Alcides%40jose1",
+          encoding: Encoding.getByName("utf-8"));
+      if (response.statusCode == 201) {
+        dom.Document document = parser.parse(response.body);
+        var tgt =
+            document.body.nodes.elementAt(1).attributes.values.elementAt(0);
+        response = await http.post(tgt,
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: "service=http://umlsks.nlm.nih.gov",
+            encoding: Encoding.getByName("utf-8"));
+        var ticket = response.body;
+        print("https://uts-ws.nlm.nih.gov/rest/search/current?string=" +
+                doenca +
+                "&ticket=" +
+                ticket);
+        response = await http.post(tgt,
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: "service=http://umlsks.nlm.nih.gov",
+            encoding: Encoding.getByName("utf-8"));
+        ticket = response.body;
+        
+        response = await http.get(
+            "https://uts-ws.nlm.nih.gov/rest/search/current?string=" +
+                doenca +
+                "&ticket=" +
+                ticket);
+        
+        print(response.body);
+        
+      }
+    }
 
     if (widget.study.protocolSection.sponsorCollaboratorsModule
             .collaboratorList !=
@@ -57,6 +101,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
               listCondicaoParticipantes.elementAt(i) + ", ";
         }
       }
+      criaTicketDisgenet(listCondicaoParticipantes.elementAt(0));
     } else {
       condicaoParticipantes = "Não informado.";
     }
@@ -104,7 +149,6 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
 
     return new Scaffold(
         floatingActionButton: new FloatingActionButton(
-          
           onPressed: () => Navigator.pushReplacementNamed(context, "/home"),
         ),
         body: new Container(
@@ -132,6 +176,13 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                 new Text(" "),
                 new Text("Critérios de seleção: " + criteriosSelecao,
                     style: subHeaderTextStyle),
+                new Text(" "),
+                new Text("Dados dos DISGENET: " + dadosDisgenet,
+                    style: subHeaderTextStyle),
+                new Text(" "),
+                new Text(" "),
+                new Text(" "),
+                new Text(" "),
               ],
             )));
   }
