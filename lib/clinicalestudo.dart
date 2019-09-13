@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 import 'package:unidb/Classes/ClinicalTrials/Study.dart';
+import 'package:unidb/Classes/disgenet/Disgenet.dart';
+import 'package:unidb/Classes/umls/umls.dart';
+import 'package:xml2json/xml2json.dart';
 import 'Classes/ClinicalTrials/Collaborator.dart';
 import 'package:http/http.dart' as http;
 
@@ -46,24 +49,30 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             body: "service=http://umlsks.nlm.nih.gov",
             encoding: Encoding.getByName("utf-8"));
         var ticket = response.body;
-        print("https://uts-ws.nlm.nih.gov/rest/search/current?string=" +
-                doenca +
-                "&ticket=" +
-                ticket);
+        
         response = await http.post(tgt,
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
             body: "service=http://umlsks.nlm.nih.gov",
             encoding: Encoding.getByName("utf-8"));
         ticket = response.body;
-        
+
         response = await http.get(
             "https://uts-ws.nlm.nih.gov/rest/search/current?string=" +
                 doenca +
                 "&ticket=" +
                 ticket);
+        var resposta = response.body;
+        Map userMap = json.decode(resposta);
+        Umls umls = Umls.fromJson(userMap);
         
-        print(response.body);
-        
+        response = await http.get(
+            "http://www.disgenet.org/api/gda/disease/" +
+                umls.result.results.elementAt(0).ui + "?format=json");
+        resposta = "";
+        resposta = response.body;
+        List<Map> mapDisgenet = json.decode(resposta);
+        Disgenet disgenet = Disgenet.fromJson(mapDisgenet.elementAt(0));
+        print(disgenet);
       }
     }
 
