@@ -64,7 +64,7 @@ class HomeScreenState extends State<HomeScreen> {
           "emDiffractionResolution,reconstructionMethod,symmetryType,pointSymmetry,aggregationState,embedding,staining,vitrification,emdbMap,additionalMap,abstractTextShort,citationAuthor," +
           "doi,firstPage,journalName,lastPage,meshTerms,pmc,publicationYear,pubmedId,title,volumeId,citationAuthor,firstPage,journalName,pmc,publicationYear,pubmedId,title,volumeId," +
           "centerInitial,centerName,projectName&primaryOnly=1";
-      print(url);
+
       // Await the http get response, then decode the json-formatted responce.
       response = await http.get(url);
       if (response.statusCode == 200) {
