@@ -48,46 +48,46 @@ class HomeScreenState extends State<HomeScreen> {
     teste.clear();
     var url = "";
     var response;
-    if (pdb) {
-      url = "https://www.rcsb.org/pdb/rest/customReport.xml?pdbids=" +
-          _filter.text +
-          "&customReportColumns=atomSiteCount,structureAuthor,classification,depositionDate,experimentalTechnique,macromoleculeType,ndbId,pdbDoi,releaseDate,residueCount,resolution,revisionDate," +
-          "structureMolecularWeight,structureTitle,chainLength,db_name,entityId,entityMacromoleculeType,kabschSander,molecularWeight,sequence,InChI,InChIKey,ligandFormula,ligandId," +
-          "ligandMolecularWeight,ligandName,ligandSmiles,EC50,IC50,Ka,Kd,Ki,deltaG,deltaH,deltaS,hetId,biologicalProcess,cellularComponent,compound,ecNo,expressionHost," +
-          "molecularFunction,plasmid,source,taxonomyId,authorAssignedEntityName,clusterNumber100,clusterNumber30,clusterNumber40,clusterNumber50,clusterNumber70,clusterNumber90," +
-          "clusterNumber95,entityId,geneName,rankNumber100,rankNumber30,rankNumber40,rankNumber50,rankNumber70,rankNumber90,rankNumber95,synonym,taxonomy,taxonomyId,uniprotAcc," +
-          "uniprotAlternativeNames,uniprotRecommendedName,cathDescription,cathId,pfamAccession,pfamDescription,pfamId,scopDomain,scopFold,scopId,crystallizationMethod,crystallizationTempK," +
-          "densityMatthews,densityPercentSol,pdbxDetails,phValue,Z_PDB,lengthOfUnitCellLatticeA,lengthOfUnitCellLatticeB,lengthOfUnitCellLatticeC,spaceGroup,unitCellAngleAlpha," +
-          "unitCellAngleBeta,unitCellAngleGamma,collectionDate,collectionTemperature,device,diffractionSource,averageBFactor,rAll,rFree,rObserved,rWork,refinementResolution," +
-          "highResolutionLimit,reflectionsForRefinement,structureDeterminationMethod,name,version,fieldStrength,manufacturer,model,contents,ionicStrength,ph,pressure,pressureUnits," +
-          "solventSystem,temperature,type,conformerId,selectionCriteria,details,method,conformerSelectionCriteria,totalConformersCalculated,totalConformersSubmitted,emResolution," +
-          "emDiffractionResolution,reconstructionMethod,symmetryType,pointSymmetry,aggregationState,embedding,staining,vitrification,emdbMap,additionalMap,abstractTextShort,citationAuthor," +
-          "doi,firstPage,journalName,lastPage,meshTerms,pmc,publicationYear,pubmedId,title,volumeId,citationAuthor,firstPage,journalName,pmc,publicationYear,pubmedId,title,volumeId," +
-          "centerInitial,centerName,projectName&primaryOnly=1";
+    // if (pdb) {
+    //   url = "https://www.rcsb.org/pdb/rest/customReport.xml?pdbids=" +
+    //       _filter.text +
+    //       "&customReportColumns=atomSiteCount,structureAuthor,classification,depositionDate,experimentalTechnique,macromoleculeType,ndbId,pdbDoi,releaseDate,residueCount,resolution,revisionDate," +
+    //       "structureMolecularWeight,structureTitle,chainLength,db_name,entityId,entityMacromoleculeType,kabschSander,molecularWeight,sequence,InChI,InChIKey,ligandFormula,ligandId," +
+    //       "ligandMolecularWeight,ligandName,ligandSmiles,EC50,IC50,Ka,Kd,Ki,deltaG,deltaH,deltaS,hetId,biologicalProcess,cellularComponent,compound,ecNo,expressionHost," +
+    //       "molecularFunction,plasmid,source,taxonomyId,authorAssignedEntityName,clusterNumber100,clusterNumber30,clusterNumber40,clusterNumber50,clusterNumber70,clusterNumber90," +
+    //       "clusterNumber95,entityId,geneName,rankNumber100,rankNumber30,rankNumber40,rankNumber50,rankNumber70,rankNumber90,rankNumber95,synonym,taxonomy,taxonomyId,uniprotAcc," +
+    //       "uniprotAlternativeNames,uniprotRecommendedName,cathDescription,cathId,pfamAccession,pfamDescription,pfamId,scopDomain,scopFold,scopId,crystallizationMethod,crystallizationTempK," +
+    //       "densityMatthews,densityPercentSol,pdbxDetails,phValue,Z_PDB,lengthOfUnitCellLatticeA,lengthOfUnitCellLatticeB,lengthOfUnitCellLatticeC,spaceGroup,unitCellAngleAlpha," +
+    //       "unitCellAngleBeta,unitCellAngleGamma,collectionDate,collectionTemperature,device,diffractionSource,averageBFactor,rAll,rFree,rObserved,rWork,refinementResolution," +
+    //       "highResolutionLimit,reflectionsForRefinement,structureDeterminationMethod,name,version,fieldStrength,manufacturer,model,contents,ionicStrength,ph,pressure,pressureUnits," +
+    //       "solventSystem,temperature,type,conformerId,selectionCriteria,details,method,conformerSelectionCriteria,totalConformersCalculated,totalConformersSubmitted,emResolution," +
+    //       "emDiffractionResolution,reconstructionMethod,symmetryType,pointSymmetry,aggregationState,embedding,staining,vitrification,emdbMap,additionalMap,abstractTextShort,citationAuthor," +
+    //       "doi,firstPage,journalName,lastPage,meshTerms,pmc,publicationYear,pubmedId,title,volumeId,citationAuthor,firstPage,journalName,pmc,publicationYear,pubmedId,title,volumeId," +
+    //       "centerInitial,centerName,projectName&primaryOnly=1";
 
-      // Await the http get response, then decode the json-formatted responce.
-      response = await http.get(url);
-      if (response.statusCode == 200) {
-        resposta = response.body;
-        resposta = resposta.replaceAll("dimStructure.", "");
-        resposta = resposta.replaceAll("dimEntity.", "");
-        //print(resposta);
-        parsing(resposta);
-        setState(() {
-          consultaConcluida = true;
-        });
-      } else {
-        setState(() {
-          consultaConcluida = false;
-        });
-        print("Request failed with status: ${response.statusCode}.");
-      }
-    }
-    if (clintrials) {
+    //   // Await the http get response, then decode the json-formatted responce.
+    //   response = await http.get(url);
+    //   if (response.statusCode == 200) {
+    //     resposta = response.body;
+    //     resposta = resposta.replaceAll("dimStructure.", "");
+    //     resposta = resposta.replaceAll("dimEntity.", "");
+    //     //print(resposta);
+    //     parsing(resposta);
+    //     setState(() {
+    //       consultaConcluida = true;
+    //     });
+    //   } else {
+    //     setState(() {
+    //       consultaConcluida = false;
+    //     });
+    //     print("Request failed with status: ${response.statusCode}.");
+    //   }
+    // }
+    // if (clintrials) {
       url = "https://clinicaltrials.gov/api/query/full_studies?expr=" +
           _filter.text +
-          "&fmt=JSON&min_rnk=1&max_rnk=2";
-
+          " AND disease&fmt=JSON&min_rnk=1&max_rnk=20";
+      print(url);
       response = await http.get(url).catchError((e) => setState(() {
             consultaConcluida = false;
             consulta = false;
@@ -115,13 +115,13 @@ class HomeScreenState extends State<HomeScreen> {
         });
         print("Request failed with status: ${response.statusCode}.");
       }
-    }
-    if (!pdb && !clintrials) {
-      setState(() {
-        consultaConcluida = false;
-        consulta = false;
-      });
-    }
+    // }
+    // if (!pdb && !clintrials) {
+    //   setState(() {
+    //     consultaConcluida = false;
+    //     consulta = false;
+    //   });
+    // }
   }
 
   void _searchPressed() {
@@ -249,42 +249,7 @@ class HomeScreenState extends State<HomeScreen> {
           appBar: _buildBar(context),
           body: new Column(
             children: <Widget>[
-              new Text("Selecione os bancos de dados para serem consultados:"),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // [Monday] checkbox
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("DisgeNet"),
-                      Checkbox(
-                        value: disgenet,
-                        onChanged: (bool value) {
-                          setState(() {
-                            disgenet = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("ClinTrials"),
-                      Checkbox(
-                        value: clintrials,
-                        onChanged: (bool value) {
-                          setState(() {
-                            clintrials = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+            ]
           ));
     }
   }

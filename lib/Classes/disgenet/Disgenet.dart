@@ -53,8 +53,8 @@ class Disgenet {
         geneid: json["geneid"],
         geneSymbol: json["gene_symbol"],
         uniprotid: json["uniprotid"] == null ? null : json["uniprotid"],
-        geneDsi: json["gene_dsi"].toDouble(),
-        geneDpi: json["gene_dpi"].toDouble(),
+        geneDsi: json["gene_dsi"] == null ? null : json["gene_dsi"].toDouble(),
+        geneDpi: json["gene_dpi"] == null ? null : json["gene_dpi"].toDouble(),
         genePli: json["gene_pli"] == null ? null : json["gene_pli"].toDouble(),
         proteinClass: json["protein_class"] == null ? null : json["protein_class"],
         proteinClassName: json["protein_class_name"] == null ? null : json["protein_class_name"],
@@ -68,7 +68,7 @@ class Disgenet {
         ei: json["ei"] == null ? null : json["ei"].toDouble(),
         yearInitial: json["year_initial"] == null ? null : json["year_initial"],
         yearFinal: json["year_final"] == null ? null : json["year_final"],
-        score: json["score"].toDouble(),
+        score: json["score"] == null ? 0 : json["score"].toDouble(),
         diseaseid: json["diseaseid"],
     );
 

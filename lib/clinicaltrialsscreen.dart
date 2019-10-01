@@ -115,7 +115,7 @@ class _StudyCardState extends State<StudyCard> {
   }
 
   criatela(Study study) {
-    Navigator.pushReplacementNamed(context, "/clinicalestudo",
+    Navigator.pushNamed(context, "/clinicalestudo",
         arguments: study);
   }
 }
