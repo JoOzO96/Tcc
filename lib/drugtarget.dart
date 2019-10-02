@@ -77,6 +77,6 @@ class _DisgenetCardState extends State<DisgenetCard> {
   }
 
   criatela(String uniprotid) {
-    Navigator.pushNamed(context, "/clinicalestudo", arguments: uniprotid);
+    Navigator.pushNamed(context, "/drugtarget", arguments: uniprotid);
   }
 }
