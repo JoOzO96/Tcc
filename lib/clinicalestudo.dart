@@ -294,44 +294,26 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
 
     if (consultaDisgenet == false) {
       return new Scaffold(
-          floatingActionButton: new FloatingActionButton(
-            onPressed: () => Navigator.pushReplacementNamed(context, "/home"),
-          ),
-          body: new Container(
-              color: Colors.white,
-              child: new ListView(
-                children: <Widget>[
-                  new Text(
-                      "Título: " +
-                          widget.study.protocolSection.identificationModule
-                              .officialTitle,
-                      style: subHeaderTextStyle),
-                  new Text(" "),
-                  new Text("Realizado por: " + nomeParticipantes,
-                      style: subHeaderTextStyle),
-                  new Text(" "),
-                  new Text(
-                      "Briefing: " +
-                          widget.study.protocolSection.descriptionModule
-                              .briefSummary,
-                      style: subHeaderTextStyle),
-                  new Text(" "),
-                  new Text(
-                      "Classificação para o estudo: " + condicaoParticipantes,
-                      style: subHeaderTextStyle),
-                  new Text(" "),
-                  new Text("Critérios de seleção: " + criteriosSelecao,
-                      style: subHeaderTextStyle),
-                  new Text(" "),
-                  new Text("Dados dos DISGENET: ", style: subHeaderTextStyle),
-                  new CircularProgressIndicator(),
-                  new Text("Agurdando dados..."),
-                  new Text(" "),
-                  new Text(" "),
-                  new Text(" "),
-                  new Text(" ")
-                ],
-              )));
+          floatingActionButton:
+              new FloatingActionButton(onPressed: () => Navigator.pop(context)),
+          body: Container(
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      TextoWidget(
+                          widget.study,
+                          nomeParticipantes,
+                          condicaoParticipantes,
+                          criteriosSelecao,
+                          consultaDisgenet),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ));
     } else {
       dadosDisgenet = "\n";
       if (listCondicaoParticipantes.length > 0) {
@@ -347,48 +329,20 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
 
       return new Scaffold(
           floatingActionButton: new FloatingActionButton(
-            onPressed: () => Navigator.pushNamed(context, "/home"),
+            onPressed: () => Navigator.pop(context),
           ),
-          // body: new Column(
-          //   children: <Widget>[
-          //     new Container(
-          //       color: Colors.white,
-          //       child: new ListView(children: <Widget>[
-          //         new Text(
-          //             "Título: " +
-          //                 widget.study.protocolSection.identificationModule
-          //                     .officialTitle,
-          //             style: subHeaderTextStyle),
-          //         new Text(" "),
-          //         new Text("Realizado por: " + nomeParticipantes,
-          //             style: subHeaderTextStyle),
-          //         new Text(" "),
-          //         new Text(
-          //             "Briefing: " +
-          //                 widget.study.protocolSection.descriptionModule
-          //                     .briefSummary,
-          //             style: subHeaderTextStyle),
-          //         new Text(" "),
-          //         new Text(
-          //             "Classificação para o estudo: " + condicaoParticipantes,
-          //             style: subHeaderTextStyle),
-          //         new Text(" "),
-          //         new Text("Critérios de seleção: " + criteriosSelecao,
-          //             style: subHeaderTextStyle),
-          //         new Text(" "),
-          //         new Text("Dados dos DISGENET: ", style: subHeaderTextStyle),
-          //       ]),
-          //     )
-          //   ],
-          // ));
           body: Container(
             child: CustomScrollView(
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildListDelegate(
                     [
-                      TextoWidget(widget.study, nomeParticipantes,
-                          condicaoParticipantes, criteriosSelecao),
+                      TextoWidget(
+                          widget.study,
+                          nomeParticipantes,
+                          condicaoParticipantes,
+                          criteriosSelecao,
+                          consultaDisgenet),
                     ],
                   ),
                 ),
@@ -433,8 +387,9 @@ class TextoWidget extends StatelessWidget {
   final String nomeParticipantes;
   final String condicaoParticipantes;
   final String criteriosSelecao;
+  final bool consultaDisgenet;
   TextoWidget(this.study, this.nomeParticipantes, this.condicaoParticipantes,
-      this.criteriosSelecao);
+      this.criteriosSelecao, this.consultaDisgenet);
 
   @override
   Widget build(BuildContext context) {
@@ -442,28 +397,59 @@ class TextoWidget extends StatelessWidget {
     final regularTextStyle = baseTextStyle.copyWith(
         color: Colors.black87, fontSize: 9.0, fontWeight: FontWeight.w400);
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 20.0);
-    return new Column(
-      children: <Widget>[
-        new Text(
-            "Título: " +
-                study.protocolSection.identificationModule.officialTitle,
-            style: subHeaderTextStyle),
-        new Text(" "),
-        new Text("Realizado por: " + nomeParticipantes,
-            style: subHeaderTextStyle),
-        new Text(" "),
-        new Text(
-            "Briefing: " + study.protocolSection.descriptionModule.briefSummary,
-            style: subHeaderTextStyle),
-        new Text(" "),
-        new Text("Classificação para o estudo: " + condicaoParticipantes,
-            style: subHeaderTextStyle),
-        new Text(" "),
-        new Text("Critérios de seleção: " + criteriosSelecao,
-            style: subHeaderTextStyle),
-        new Text(" "),
-        new Text("Dados dos DISGENET: ", style: subHeaderTextStyle),
-      ],
-    );
+    if (consultaDisgenet == false) {
+      return new Column(
+        children: <Widget>[
+          new Text(
+              "Título: " +
+                  study.protocolSection.identificationModule.officialTitle,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text("Realizado por: " + nomeParticipantes,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text(
+              "Briefing: " +
+                  study.protocolSection.descriptionModule.briefSummary,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text("Classificação para o estudo: " + condicaoParticipantes,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text("Critérios de seleção: " + criteriosSelecao,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text("Dados dos DISGENET: ", style: subHeaderTextStyle),
+          new Text(" "),
+          new CircularProgressIndicator(),
+          new Text("Aguardando dados do DISGENET"),
+        ],
+      );
+    } else {
+      return new Column(
+        children: <Widget>[
+          new Text(
+              "Título: " +
+                  study.protocolSection.identificationModule.officialTitle,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text("Realizado por: " + nomeParticipantes,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text(
+              "Briefing: " +
+                  study.protocolSection.descriptionModule.briefSummary,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text("Classificação para o estudo: " + condicaoParticipantes,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text("Critérios de seleção: " + criteriosSelecao,
+              style: subHeaderTextStyle),
+          new Text(" "),
+          new Text("Dados dos DISGENET: ", style: subHeaderTextStyle),
+        ],
+      );
+    }
   }
 }

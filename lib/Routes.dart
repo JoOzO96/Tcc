@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:unidb/Classes/ClinicalTrials/Study.dart';
 import 'package:unidb/clinicalestudo.dart';
 import 'package:unidb/consulta.dart';
+import 'package:unidb/drugtargetscreen.dart';
 import 'package:unidb/home.dart';
 
 class Routes {
@@ -29,6 +29,12 @@ class Routes {
           case '/clinicalestudo':
             return new MyCustomRoute(
               builder: (_) => new ClinicalEstudoScreen(settings.arguments),
+              settings: settings,
+            );
+        }switch (settings.name) {
+          case '/drugtargetscreen':
+            return new MyCustomRoute(
+              builder: (_) => new DrugTargetScreen(settings.arguments),
               settings: settings,
             );
         }
