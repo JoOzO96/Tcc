@@ -12,9 +12,23 @@ class ChemblCard extends StatefulWidget {
 
 class _ChemblCardState extends State<ChemblCard> {
   bool segue = false;
-
+  String listaNomes;
   @override
   Widget build(BuildContext context) {
+    if (widget._chemblMolecule.molecule.moleculeSynonyms != null) {
+      for (int i = 0;
+          widget._chemblMolecule.molecule.moleculeSynonyms.synonym.length > i;
+          i++) {
+        listaNomes = "" +
+            widget._chemblMolecule.molecule.moleculeSynonyms.synonym
+                .elementAt(i)
+                .moleculeSynonym +
+            "\n";
+      }
+    }else{
+      listaNomes = "Sem sinonimos";
+    }
+
     final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
     final regularTextStyle = baseTextStyle.copyWith(
         color: const Color(0xffb6b2df),
@@ -35,10 +49,25 @@ class _ChemblCardState extends State<ChemblCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           new Container(height: 2.0),
-          new Text("CHEMBLID: " + widget._chemblMolecule.molecule.moleculeHierarchy.moleculeChemblId,
+          new Text(
+              "CHEMBLID: " +
+                  widget._chemblMolecule.molecule.moleculeHierarchy
+                      .moleculeChemblId,
               style: subHeaderTextStyle),
-          new Text("Fórmula: " + widget._chemblMolecule.molecule.moleculeProperties.fullMolformula,
+          new Text("Nome: " + widget._chemblMolecule.molecule.prefName,
               style: subHeaderTextStyle),
+          new Text(
+              "Administração oral: " +
+                  (widget._chemblMolecule.molecule.oral == true
+                      ? "Sim"
+                      : "Não"),
+              style: subHeaderTextStyle),
+          new Text(
+              "Fórmula: " +
+                  widget._chemblMolecule.molecule.moleculeProperties
+                      .fullMolformula,
+              style: subHeaderTextStyle),
+          new Text("Sinonimos: " + listaNomes, style: subHeaderTextStyle)
           // new Text("Simbolo: " + widget.disgenet.geneSymbol,
           //     style: subHeaderTextStyle),
           // new Text("Score: " + widget.disgenet.score.toString(),

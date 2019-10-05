@@ -23,14 +23,14 @@ class Molecule {
   String availabilityType;
   Null biotherapeutic;
   String blackBoxWarning;
-  Null chebiParId;
+  String chebiParId;
   String chirality;
   CrossReferences crossReferences;
   bool dosedIngredient;
   String firstApproval;
   String firstInClass;
-  Null helmNotation;
-  Null indicationClass;
+  String helmNotation;
+  String indicationClass;
   String inorganicFlag;
   String maxPhase;
   String moleculeChemblId;
@@ -41,22 +41,22 @@ class Molecule {
   String moleculeType;
   String naturalProduct;
   bool oral;
-  Null parenteral;
-  Null polymerFlag;
+  String parenteral;
+  String polymerFlag;
   String prefName;
   String prodrug;
   String structureType;
   bool therapeuticFlag;
-  Null topical;
+  String topical;
   String usanStem;
   String usanStemDefinition;
   String usanSubstem;
   String usanYear;
-  Null withdrawnClass;
-  Null withdrawnCountry;
-  Null withdrawnFlag;
-  Null withdrawnReason;
-  Null withdrawnYear;
+  String withdrawnClass;
+  String withdrawnCountry;
+  String withdrawnFlag;
+  String withdrawnReason;
+  String withdrawnYear;
 
   Molecule(
       {this.atcClassifications,
@@ -226,22 +226,21 @@ class MoleculeHierarchy {
 }
 
 class CrossReferences {
-  MoleculeChemicals molecule;
+  List<MoleculeChemicals> molecule;
 
   CrossReferences({this.molecule});
 
   CrossReferences.fromJson(Map<String, dynamic> json) {
-    molecule = json['molecule'] != null
-        ? new MoleculeChemicals.fromJson(json['molecule'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.molecule != null) {
-      data['molecule'] = this.molecule.toJson();
+    molecule = new List<MoleculeChemicals>();
+    if (json['molecule'].toString().startsWith("[")) {
+      if (json['molecule'] != null) {
+        json['molecule'].forEach((v) {
+          molecule.add(new MoleculeChemicals.fromJson(v));
+        });
+      }
+    } else {
+      molecule.add(new MoleculeChemicals.fromJson(json['molecule']));
     }
-    return data;
   }
 }
 
@@ -392,15 +391,23 @@ class MoleculeSynonyms {
   MoleculeSynonyms.fromJson(Map<String, dynamic> json) {
     if (json['synonym'] != null) {
       synonym = new List<Synonym>();
-      if (json['synonym'].)
-      json['synonym'].forEach((f) {
-        synonym.add(new Synonym.fromJson(f));
-      });
+      if (json['synonym'].toString().startsWith("[")) {
+        json['synonym'].forEach((f) {
+          synonym.add(new Synonym.fromJson(f));
+        });
+      } else {
+        synonym.add(new Synonym.fromJson(json['synonym']));
+      }
     }
   }
+  // MoleculeSynonyms.fromJson(Map<String, dynamic> json) {
+  //   synonym =
+  //       json['synonym'] != null ? new Synonym.fromJson(json['synonym']) : null;
+  // }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+
     if (this.synonym != null) {
       data['synonym'] = this.synonym.map((v) => v.toJson()).toList();
     }
