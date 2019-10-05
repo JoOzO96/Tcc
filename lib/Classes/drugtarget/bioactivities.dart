@@ -1,5 +1,5 @@
 class Bioactivities {
-  Null activityComment;
+  String activityComment;
   String annotated;
   String annotationComments;
   String assayCellType;
@@ -61,7 +61,7 @@ class Bioactivities {
       this.wildtypeOrMutant});
 
   Bioactivities.fromJson(Map<String, dynamic> json) {
-    activityComment = json['activity_comment'];
+    activityComment = json['activity_comment'] != null ? json['activity_comment'] : "";
     annotated = json['annotated'];
     annotationComments = json['annotation_comments'];
     assayCellType = json['assay_cell_type'];

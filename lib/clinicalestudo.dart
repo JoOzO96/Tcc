@@ -88,9 +88,6 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
       response = await http.get("http://www.disgenet.org/api/gda/disease/" +
           umls.result.results.elementAt(0).ui +
           "?format=json");
-      print("http://www.disgenet.org/api/gda/disease/" +
-          umls.result.results.elementAt(0).ui +
-          "?format=json");
       resposta = "";
       resposta = response.body;
       disgenet0 = disgenetFromJson(resposta);
@@ -108,7 +105,6 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
   }
 
   montaTela() {
-    print("INICIO:" + TimeOfDay.now().toString());
     montarTela = false;
     if (widget.study.protocolSection.sponsorCollaboratorsModule
             .collaboratorList !=
@@ -296,22 +292,24 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
       return new Scaffold(
           floatingActionButton:
               new FloatingActionButton(onPressed: () => Navigator.pop(context)),
-          body: Container(
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      TextoWidget(
-                          widget.study,
-                          nomeParticipantes,
-                          condicaoParticipantes,
-                          criteriosSelecao,
-                          consultaDisgenet),
-                    ],
+          body: new SafeArea(
+            child: Container(
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        TextoWidget(
+                            widget.study,
+                            nomeParticipantes,
+                            condicaoParticipantes,
+                            criteriosSelecao,
+                            consultaDisgenet),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ));
     } else {
@@ -331,37 +329,40 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
           floatingActionButton: new FloatingActionButton(
             onPressed: () => Navigator.pop(context),
           ),
-          body: Container(
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      TextoWidget(
-                          widget.study,
-                          nomeParticipantes,
-                          condicaoParticipantes,
-                          criteriosSelecao,
-                          consultaDisgenet),
-                    ],
+          body: new SafeArea(
+            child: Container(
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        TextoWidget(
+                            widget.study,
+                            nomeParticipantes,
+                            condicaoParticipantes,
+                            criteriosSelecao,
+                            consultaDisgenet),
+                      ],
+                    ),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      DoencaWidget(listCondicaoParticipantes.elementAt(0)),
-                    ],
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        DoencaWidget(listCondicaoParticipantes.elementAt(0)),
+                      ],
+                    ),
                   ),
-                ),
-                SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  delegate: new SliverChildBuilderDelegate(
-                    (context, index) => new DisgenetCard(disgenet1Final[index]),
-                    childCount: disgenet1Final.length,
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2),
+                    delegate: new SliverChildBuilderDelegate(
+                      (context, index) =>
+                          new DisgenetCard(disgenet1Final[index]),
+                      childCount: disgenet1Final.length,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ));
     }

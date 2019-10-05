@@ -1,16 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:unidb/Classes/disgenet/Disgenet.dart';
+import 'package:unidb/Classes/chembl/chemblmolecule.dart';
 
-class DisgenetCard extends StatefulWidget {
-  final Disgenet disgenet;
-  DisgenetCard(this.disgenet);
+class ChemblCard extends StatefulWidget {
+  final ChemblMolecule _chemblMolecule;
+  ChemblCard(this._chemblMolecule);
 
   @override
-  _DisgenetCardState createState() => _DisgenetCardState();
+  _ChemblCardState createState() => _ChemblCardState();
 }
 
-class _DisgenetCardState extends State<DisgenetCard> {
+class _ChemblCardState extends State<ChemblCard> {
   bool segue = false;
 
   @override
@@ -35,12 +35,14 @@ class _DisgenetCardState extends State<DisgenetCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           new Container(height: 2.0),
-          new Text("UNIPROT: " + widget.disgenet.uniprotid,
+          new Text("CHEMBLID: " + widget._chemblMolecule.molecule.moleculeHierarchy.moleculeChemblId,
               style: subHeaderTextStyle),
-          new Text("Simbolo: " + widget.disgenet.geneSymbol,
+          new Text("Fórmula: " + widget._chemblMolecule.molecule.moleculeProperties.fullMolformula,
               style: subHeaderTextStyle),
-          new Text("Score: " + widget.disgenet.score.toString(),
-              style: subHeaderTextStyle),
+          // new Text("Simbolo: " + widget.disgenet.geneSymbol,
+          //     style: subHeaderTextStyle),
+          // new Text("Score: " + widget.disgenet.score.toString(),
+          //     style: subHeaderTextStyle),
         ],
       ),
     );
@@ -65,15 +67,15 @@ class _DisgenetCardState extends State<DisgenetCard> {
     );
 
     return new GestureDetector(
-        child: Center(
-            child: Container(
-                height: 130,
-                margin: const EdgeInsets.symmetric(
-                  vertical: 16.0,
-                  horizontal: 16.0,
-                ),
-                child: planetCard)),
-        onTap: () => criatela(widget.disgenet.uniprotid));
+      child: Center(
+          child: Container(
+              height: 130,
+              margin: const EdgeInsets.symmetric(
+                vertical: 16.0,
+                horizontal: 16.0,
+              ),
+              child: planetCard)),
+    );
   }
 
   criatela(String uniprotid) {
