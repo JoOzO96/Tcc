@@ -21,7 +21,7 @@ class ChemblMolecule {
 class Molecule {
   AtcClassifications atcClassifications;
   String availabilityType;
-  Null biotherapeutic;
+  // Bioterapeutic biotherapeutic;
   String blackBoxWarning;
   String chebiParId;
   String chirality;
@@ -61,7 +61,7 @@ class Molecule {
   Molecule(
       {this.atcClassifications,
       this.availabilityType,
-      this.biotherapeutic,
+      // this.biotherapeutic,
       this.blackBoxWarning,
       this.chebiParId,
       this.chirality,
@@ -103,7 +103,7 @@ class Molecule {
         ? new AtcClassifications.fromJson(json['atc_classifications'])
         : null;
     availabilityType = json['availability_type'];
-    biotherapeutic = json['biotherapeutic'];
+    // biotherapeutic = json['biotherapeutic'];
     blackBoxWarning = json['black_box_warning'];
     chebiParId = json['chebi_par_id'];
     chirality = json['chirality'];
@@ -135,10 +135,10 @@ class Molecule {
     naturalProduct = json['natural_product'];
     oral = json['oral'] != null
         ? json['oral'].toString().toLowerCase() == "true"
-        : null;
+        : false;
     parenteral = json['parenteral'];
     polymerFlag = json['polymer_flag'];
-    prefName = json['pref_name'];
+    prefName = json['pref_name'] != null ? json['pref_name'] : "No name";
     prodrug = json['prodrug'];
     structureType = json['structure_type'];
     therapeuticFlag = json['therapeutic_flag'] != null
@@ -160,7 +160,7 @@ class Molecule {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['atc_classifications'] = this.atcClassifications;
     data['availability_type'] = this.availabilityType;
-    data['biotherapeutic'] = this.biotherapeutic;
+    // data['biotherapeutic'] = this.biotherapeutic;
     data['black_box_warning'] = this.blackBoxWarning;
     data['chebi_par_id'] = this.chebiParId;
     data['chirality'] = this.chirality;
@@ -223,6 +223,10 @@ class MoleculeHierarchy {
     data['parent_chembl_id'] = this.parentChemblId;
     return data;
   }
+}
+
+class Bioterapeutic{
+  
 }
 
 class CrossReferences {

@@ -327,6 +327,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
 
       return new Scaffold(
           floatingActionButton: new FloatingActionButton(
+            child: Icon(Icons.arrow_back_ios),
             onPressed: () => Navigator.pop(context),
           ),
           body: new SafeArea(

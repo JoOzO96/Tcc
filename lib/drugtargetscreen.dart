@@ -75,17 +75,30 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (consultaconcluida) {
+    if (consultaconcluida && listaMoleculas.length == 0) {
       return new Scaffold(
+        floatingActionButton:
+            new FloatingActionButton(child: Icon(Icons.arrow_back_ios),onPressed: () => Navigator.pop(context)),
+        body: Container(
+            child: new Container(
+          margin: new EdgeInsets.all(30),
+          child: new Center(
+            child: new Text("Sem informacoes de moleculas"),
+          ),
+        )),
+      );
+    } else if (consultaconcluida && listaMoleculas.length > 0) {
+      return new Scaffold(
+          resizeToAvoidBottomInset: false,
           floatingActionButton:
-              new FloatingActionButton(onPressed: () => Navigator.pop(context)),
+              new FloatingActionButton(child: Icon(Icons.arrow_back_ios), onPressed: () => Navigator.pop(context)),
           body: new SafeArea(
             child: Container(
               child: CustomScrollView(
                 slivers: <Widget>[
                   SliverGrid(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 4, crossAxisCount: 1),
+                        childAspectRatio: 2, crossAxisCount: 1),
                     delegate: new SliverChildBuilderDelegate(
                       (context, index) => new ChemblCard(listaMoleculas[index]),
                       childCount: listaMoleculas.length,
@@ -98,7 +111,7 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
     } else {
       return new Scaffold(
           floatingActionButton:
-              new FloatingActionButton(onPressed: () => Navigator.pop(context)),
+              new FloatingActionButton(child: Icon(Icons.arrow_back_ios), onPressed: () => Navigator.pop(context)),
           body: new SafeArea(
             child: Container(
                 child: Center(

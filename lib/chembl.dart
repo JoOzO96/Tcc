@@ -12,20 +12,35 @@ class ChemblCard extends StatefulWidget {
 
 class _ChemblCardState extends State<ChemblCard> {
   bool segue = false;
-  String listaNomes;
+  String listaNomes = "";
+  List<String> lista = new List();
   @override
   Widget build(BuildContext context) {
     if (widget._chemblMolecule.molecule.moleculeSynonyms != null) {
       for (int i = 0;
           widget._chemblMolecule.molecule.moleculeSynonyms.synonym.length > i;
           i++) {
-        listaNomes = "" +
-            widget._chemblMolecule.molecule.moleculeSynonyms.synonym
+        if (widget._chemblMolecule.molecule.moleculeSynonyms.synonym
                 .elementAt(i)
-                .moleculeSynonym +
-            "\n";
+                .moleculeSynonym !=
+            null) {
+          if (!lista.contains(widget
+              ._chemblMolecule.molecule.moleculeSynonyms.synonym
+              .elementAt(i)
+              .moleculeSynonym)) {
+            listaNomes = listaNomes +
+                "" +
+                widget._chemblMolecule.molecule.moleculeSynonyms.synonym
+                    .elementAt(i)
+                    .moleculeSynonym +
+                "\n";
+            lista.add(widget._chemblMolecule.molecule.moleculeSynonyms.synonym
+                .elementAt(i)
+                .moleculeSynonym);
+          }
+        }
       }
-    }else{
+    } else {
       listaNomes = "Sem sinonimos";
     }
 
@@ -34,21 +49,16 @@ class _ChemblCardState extends State<ChemblCard> {
         color: const Color(0xffb6b2df),
         fontSize: 9.0,
         fontWeight: FontWeight.w400);
-    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
+    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 14.0);
     var planetCardContent = new Container(
         margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
         constraints: new BoxConstraints.expand(),
         child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[]));
-
-    planetCardContent = new Container(
-      margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
-      constraints: new BoxConstraints.expand(),
+    var planetCardContent2 = new Flexible(
       child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new Container(height: 2.0),
           new Text(
               "CHEMBLID: " +
                   widget._chemblMolecule.molecule.moleculeHierarchy
@@ -64,10 +74,44 @@ class _ChemblCardState extends State<ChemblCard> {
               style: subHeaderTextStyle),
           new Text(
               "Fórmula: " +
+                          widget._chemblMolecule.molecule.moleculeProperties
+                              .fullMolformula !=
+                      null
+                  ? widget._chemblMolecule.molecule.moleculeProperties
+                      .fullMolformula
+                  : "Sem informacoes",
+              style: subHeaderTextStyle),
+          new Text("Sinonimos: " + listaNomes, style: subHeaderTextStyle)
+        ],
+      ),
+    );
+    planetCardContent = new Container(
+      margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
+      constraints: new BoxConstraints.expand(),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Container(height: 2.0),
+
+          new Text(
+              "CHEMBLID: " +
+                  widget._chemblMolecule.molecule.moleculeHierarchy
+                      .moleculeChemblId,
+              style: subHeaderTextStyle),
+          // new Text("Nome: " + widget._chemblMolecule.molecule.prefName,
+          //     style: subHeaderTextStyle),
+          // new Text(
+          //     "Administração oral: " +
+          //         (widget._chemblMolecule.molecule.oral == true
+          //             ? "Sim"
+          //             : "Não"),
+          //     style: subHeaderTextStyle),
+          new Text(
+              "Formula: " +
                   widget._chemblMolecule.molecule.moleculeProperties
                       .fullMolformula,
               style: subHeaderTextStyle),
-          new Text("Sinonimos: " + listaNomes, style: subHeaderTextStyle)
+          // new Text("Sinonimos: " + listaNomes, style: subHeaderTextStyle)
           // new Text("Simbolo: " + widget.disgenet.geneSymbol,
           //     style: subHeaderTextStyle),
           // new Text("Score: " + widget.disgenet.score.toString(),
@@ -77,9 +121,10 @@ class _ChemblCardState extends State<ChemblCard> {
     );
 
     final planetCard = new Container(
-      child: planetCardContent,
+      child: new Column(
+        children: <Widget>[planetCardContent2],
+      ),
       width: MediaQuery.of(context).size.height,
-      height: 130,
       margin: new EdgeInsets.only(left: 1),
       decoration: new BoxDecoration(
         color: new Color(0xFA333366),
@@ -98,7 +143,6 @@ class _ChemblCardState extends State<ChemblCard> {
     return new GestureDetector(
       child: Center(
           child: Container(
-              height: 130,
               margin: const EdgeInsets.symmetric(
                 vertical: 16.0,
                 horizontal: 16.0,
