@@ -40,6 +40,11 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
   bool controle3 = true;
   bool controle4 = true;
   bool controle5 = true;
+  bool controle1Final = false;
+  bool controle2Final = false;
+  bool controle3Final = false;
+  bool controle4Final = false;
+  bool controle5Final = false;
   bool consultaDisgenet = false;
   List<String> listCondicaoParticipantes = new List();
   @override
@@ -88,15 +93,24 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
       response = await http.get("http://www.disgenet.org/api/gda/disease/" +
           umls.result.results.elementAt(0).ui +
           "?format=json");
+      print("http://www.disgenet.org/api/gda/disease/" +
+          umls.result.results.elementAt(0).ui +
+          "?format=json");
       resposta = "";
       resposta = response.body;
-      disgenet0 = disgenetFromJson(resposta);
-      disgenet0.sort((a, b) => b.score.compareTo(a.score));
+      
+      if (resposta.toString().contains("errors")) {
+        disgenet0 = new List();
+      } else {
+        disgenet0 = disgenetFromJson(resposta);
+        disgenet0.sort((a, b) => b.score.compareTo(a.score));
+        disgenet0 = disgenet0.where((p) => p.score > 0.5).toList();
+      }
     }
     setState(() {
       controle0 = true;
     });
-    disgenet0 = disgenet0.where((p) => p.score > 0.5).toList();
+    
     if (disgenet0.length > 50) {
       return disgenet0.sublist(0, 50);
     } else {
@@ -155,6 +169,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
               consultaDisgenet = true;
             }
             disgenet1Final = resultList;
+            controle1Final = true;
           });
         });
         if (listCondicaoParticipantes.length > 1) {
@@ -173,6 +188,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                 consultaDisgenet = true;
               }
               disgenet2Final = resultList;
+              controle2Final = true;
             });
           });
         }
@@ -192,6 +208,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                 consultaDisgenet = true;
               }
               disgenet3Final = resultList;
+              controle3Final = true;
             });
           });
         }
@@ -211,6 +228,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                 consultaDisgenet = true;
               }
               disgenet4Final = resultList;
+              controle4Final = true;
             });
           });
         }
@@ -230,6 +248,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                 consultaDisgenet = true;
               }
               disgenet5Final = resultList;
+              controle5Final = true;
             });
           });
         }
@@ -313,59 +332,398 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             ),
           ));
     } else {
-      dadosDisgenet = "\n";
-      if (listCondicaoParticipantes.length > 0) {
-        dadosDisgenet = " Doença: " + listCondicaoParticipantes.elementAt(0);
-        dadosDisgenet = dadosDisgenet + "\n Genes Relacionados: \n";
-        for (int i = 0; disgenet1Final.length > i; i++) {
-          dadosDisgenet = dadosDisgenet +
-              "   " +
-              disgenet1Final.elementAt(i).geneSymbol +
-              " \n";
-        }
+      if (controle1Final == true &&
+          controle2Final == false &&
+          controle3Final == false &&
+          controle4Final == false &&
+          controle5Final == false) {
+        dadosDisgenet = "\n";
+
+        return new Scaffold(
+            floatingActionButton: new FloatingActionButton(
+              child: Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context),
+            ),
+            body: new SafeArea(
+              child: Container(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          TextoWidget(
+                              widget.study,
+                              nomeParticipantes,
+                              condicaoParticipantes,
+                              criteriosSelecao,
+                              consultaDisgenet),
+                        ],
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(0)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet1Final[index]),
+                        childCount: disgenet1Final.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
       }
 
-      return new Scaffold(
-          floatingActionButton: new FloatingActionButton(
-            child: Icon(Icons.arrow_back_ios),
-            onPressed: () => Navigator.pop(context),
-          ),
-          body: new SafeArea(
-            child: Container(
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        TextoWidget(
-                            widget.study,
-                            nomeParticipantes,
-                            condicaoParticipantes,
-                            criteriosSelecao,
-                            consultaDisgenet),
-                      ],
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        DoencaWidget(listCondicaoParticipantes.elementAt(0)),
-                      ],
-                    ),
-                  ),
-                  SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
-                    delegate: new SliverChildBuilderDelegate(
-                      (context, index) =>
-                          new DisgenetCard(disgenet1Final[index]),
-                      childCount: disgenet1Final.length,
-                    ),
-                  ),
-                ],
-              ),
+      if (controle1Final == true &&
+          controle2Final == true &&
+          controle3Final == false &&
+          controle4Final == false &&
+          controle5Final == false) {
+        dadosDisgenet = "\n";
+
+        return new Scaffold(
+            floatingActionButton: new FloatingActionButton(
+              child: Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context),
             ),
-          ));
+            body: new SafeArea(
+              child: Container(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          TextoWidget(
+                              widget.study,
+                              nomeParticipantes,
+                              condicaoParticipantes,
+                              criteriosSelecao,
+                              consultaDisgenet),
+                        ],
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(0)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet1Final[index]),
+                        childCount: disgenet1Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(1)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet2Final[index]),
+                        childCount: disgenet2Final.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+      }
+
+      if (controle1Final == true &&
+          controle2Final == true &&
+          controle3Final == true &&
+          controle4Final == false &&
+          controle5Final == false) {
+        dadosDisgenet = "\n";
+
+        return new Scaffold(
+            floatingActionButton: new FloatingActionButton(
+              child: Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context),
+            ),
+            body: new SafeArea(
+              child: Container(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          TextoWidget(
+                              widget.study,
+                              nomeParticipantes,
+                              condicaoParticipantes,
+                              criteriosSelecao,
+                              consultaDisgenet),
+                        ],
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(0)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet1Final[index]),
+                        childCount: disgenet1Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(1)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet2Final[index]),
+                        childCount: disgenet2Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(2)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet3Final[index]),
+                        childCount: disgenet3Final.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+      }
+
+      if (controle1Final == true &&
+          controle2Final == true &&
+          controle3Final == true &&
+          controle4Final == true &&
+          controle5Final == false) {
+        dadosDisgenet = "\n";
+
+        return new Scaffold(
+            floatingActionButton: new FloatingActionButton(
+              child: Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context),
+            ),
+            body: new SafeArea(
+              child: Container(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          TextoWidget(
+                              widget.study,
+                              nomeParticipantes,
+                              condicaoParticipantes,
+                              criteriosSelecao,
+                              consultaDisgenet),
+                        ],
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(0)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet1Final[index]),
+                        childCount: disgenet1Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(1)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet2Final[index]),
+                        childCount: disgenet2Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(2)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet3Final[index]),
+                        childCount: disgenet3Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(3)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet4Final[index]),
+                        childCount: disgenet4Final.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+      }
+      if (controle1Final == true &&
+          controle2Final == true &&
+          controle3Final == true &&
+          controle4Final == true &&
+          controle5Final == true) {
+        dadosDisgenet = "\n";
+
+        return new Scaffold(
+            floatingActionButton: new FloatingActionButton(
+              child: Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context),
+            ),
+            body: new SafeArea(
+              child: Container(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          TextoWidget(
+                              widget.study,
+                              nomeParticipantes,
+                              condicaoParticipantes,
+                              criteriosSelecao,
+                              consultaDisgenet),
+                        ],
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(0)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet1Final[index]),
+                        childCount: disgenet1Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(1)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet2Final[index]),
+                        childCount: disgenet2Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(2)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet3Final[index]),
+                        childCount: disgenet3Final.length,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          DoencaWidget(listCondicaoParticipantes.elementAt(4)),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      delegate: new SliverChildBuilderDelegate(
+                        (context, index) =>
+                            new DisgenetCard(disgenet5Final[index]),
+                        childCount: disgenet5Final.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+      }
     }
   }
 }

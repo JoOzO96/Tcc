@@ -37,6 +37,9 @@ class _ChemblCardState extends State<ChemblCard> {
             lista.add(widget._chemblMolecule.molecule.moleculeSynonyms.synonym
                 .elementAt(i)
                 .moleculeSynonym);
+            if (lista.length ==5){
+              break;
+            }
           }
         }
       }
