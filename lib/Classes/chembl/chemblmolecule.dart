@@ -1,53 +1,33 @@
-class ChemblMolecule {
-  Molecule molecule;
-
-  ChemblMolecule({this.molecule});
-
-  ChemblMolecule.fromJson(Map<String, dynamic> json) {
-    molecule = json['molecule'] != null
-        ? new Molecule.fromJson(json['molecule'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.molecule != null) {
-      data['molecule'] = this.molecule.toJson();
-    }
-    return data;
-  }
-}
-
-class Molecule {
-  AtcClassifications atcClassifications;
+class Quimicos {
+  List<Null> atcClassifications;
   String availabilityType;
-  // Bioterapeutic biotherapeutic;
+  Null biotherapeutic;
   String blackBoxWarning;
-  String chebiParId;
+  Null chebiParId;
   String chirality;
-  CrossReferences crossReferences;
+  List<CrossReferences> crossReferences;
   bool dosedIngredient;
-  String firstApproval;
+  Null firstApproval;
   String firstInClass;
-  String helmNotation;
-  String indicationClass;
+  Null helmNotation;
+  Null indicationClass;
   String inorganicFlag;
-  String maxPhase;
+  int maxPhase;
   String moleculeChemblId;
   MoleculeHierarchy moleculeHierarchy;
   MoleculeProperties moleculeProperties;
   MoleculeStructures moleculeStructures;
-  MoleculeSynonyms moleculeSynonyms;
+  List<MoleculeSynonyms> moleculeSynonyms;
   String moleculeType;
   String naturalProduct;
   bool oral;
-  String parenteral;
-  String polymerFlag;
+  bool parenteral;
+  bool polymerFlag;
   String prefName;
   String prodrug;
   String structureType;
   bool therapeuticFlag;
-  String topical;
+  bool topical;
   String usanStem;
   String usanStemDefinition;
   String usanSubstem;
@@ -58,10 +38,10 @@ class Molecule {
   String withdrawnReason;
   String withdrawnYear;
 
-  Molecule(
+  Quimicos(
       {this.atcClassifications,
       this.availabilityType,
-      // this.biotherapeutic,
+      this.biotherapeutic,
       this.blackBoxWarning,
       this.chebiParId,
       this.chirality,
@@ -98,27 +78,32 @@ class Molecule {
       this.withdrawnReason,
       this.withdrawnYear});
 
-  Molecule.fromJson(Map<String, dynamic> json) {
-    atcClassifications = json['atc_classifications'] != null
-        ? new AtcClassifications.fromJson(json['atc_classifications'])
-        : null;
+  Quimicos.fromJson(Map<String, dynamic> json) {
+    if (json['atc_classifications'] != null) {
+      atcClassifications = new List<Null>();
+      json['atc_classifications'].forEach((v) {
+        // atcClassifications.add(new Null.fromJson(v));
+      });
+    }
     availabilityType = json['availability_type'];
-    // biotherapeutic = json['biotherapeutic'];
+    biotherapeutic = json['biotherapeutic'];
     blackBoxWarning = json['black_box_warning'];
     chebiParId = json['chebi_par_id'];
     chirality = json['chirality'];
-    crossReferences = json['cross_references'] != null
-        ? new CrossReferences.fromJson(json['cross_references'])
-        : null;
-    dosedIngredient =
-        json['dosed_ingredient'].toString().toLowerCase() == "true";
+    if (json['cross_references'] != null) {
+      crossReferences = new List<CrossReferences>();
+      json['cross_references'].forEach((v) {
+        crossReferences.add(new CrossReferences.fromJson(v));
+      });
+    }
+    dosedIngredient = json['dosed_ingredient'];
     firstApproval = json['first_approval'];
     firstInClass = json['first_in_class'];
     helmNotation = json['helm_notation'];
     indicationClass = json['indication_class'];
     inorganicFlag = json['inorganic_flag'];
     maxPhase = json['max_phase'];
-    moleculeChemblId = json['molecule_chembl_id'];
+    moleculeChemblId = json['molecule_chembl_id'].toString();
     moleculeHierarchy = json['molecule_hierarchy'] != null
         ? new MoleculeHierarchy.fromJson(json['molecule_hierarchy'])
         : null;
@@ -128,22 +113,21 @@ class Molecule {
     moleculeStructures = json['molecule_structures'] != null
         ? new MoleculeStructures.fromJson(json['molecule_structures'])
         : null;
-    moleculeSynonyms = json['molecule_synonyms'] != null
-        ? new MoleculeSynonyms.fromJson(json['molecule_synonyms'])
-        : null;
+    if (json['molecule_synonyms'] != null) {
+      moleculeSynonyms = new List<MoleculeSynonyms>();
+      json['molecule_synonyms'].forEach((v) {
+        moleculeSynonyms.add(new MoleculeSynonyms.fromJson(v));
+      });
+    }
     moleculeType = json['molecule_type'];
     naturalProduct = json['natural_product'];
-    oral = json['oral'] != null
-        ? json['oral'].toString().toLowerCase() == "true"
-        : false;
+    oral = json['oral'];
     parenteral = json['parenteral'];
     polymerFlag = json['polymer_flag'];
-    prefName = json['pref_name'] != null ? json['pref_name'] : "No name";
+    prefName = json['pref_name'];
     prodrug = json['prodrug'];
     structureType = json['structure_type'];
-    therapeuticFlag = json['therapeutic_flag'] != null
-        ? json['therapeutic_flag'].toString().toLowerCase() == "true"
-        : null;
+    therapeuticFlag = json['therapeutic_flag'];
     topical = json['topical'];
     usanStem = json['usan_stem'];
     usanStemDefinition = json['usan_stem_definition'];
@@ -155,53 +139,26 @@ class Molecule {
     withdrawnReason = json['withdrawn_reason'];
     withdrawnYear = json['withdrawn_year'];
   }
+}
+
+class CrossReferences {
+  String xrefId;
+  String xrefName;
+  String xrefSrc;
+
+  CrossReferences({this.xrefId, this.xrefName, this.xrefSrc});
+
+  CrossReferences.fromJson(Map<String, dynamic> json) {
+    xrefId = json['xref_id'];
+    xrefName = json['xref_name'];
+    xrefSrc = json['xref_src'];
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['atc_classifications'] = this.atcClassifications;
-    data['availability_type'] = this.availabilityType;
-    // data['biotherapeutic'] = this.biotherapeutic;
-    data['black_box_warning'] = this.blackBoxWarning;
-    data['chebi_par_id'] = this.chebiParId;
-    data['chirality'] = this.chirality;
-    data['cross_references'] = this.crossReferences;
-    data['dosed_ingredient'] = this.dosedIngredient;
-    data['first_approval'] = this.firstApproval;
-    data['first_in_class'] = this.firstInClass;
-    data['helm_notation'] = this.helmNotation;
-    data['indication_class'] = this.indicationClass;
-    data['inorganic_flag'] = this.inorganicFlag;
-    data['max_phase'] = this.maxPhase;
-    data['molecule_chembl_id'] = this.moleculeChemblId;
-    if (this.moleculeHierarchy != null) {
-      data['molecule_hierarchy'] = this.moleculeHierarchy.toJson();
-    }
-    if (this.moleculeProperties != null) {
-      data['molecule_properties'] = this.moleculeProperties.toJson();
-    }
-    if (this.moleculeStructures != null) {
-      data['molecule_structures'] = this.moleculeStructures.toJson();
-    }
-    data['molecule_synonyms'] = this.moleculeSynonyms;
-    data['molecule_type'] = this.moleculeType;
-    data['natural_product'] = this.naturalProduct;
-    data['oral'] = this.oral;
-    data['parenteral'] = this.parenteral;
-    data['polymer_flag'] = this.polymerFlag;
-    data['pref_name'] = this.prefName;
-    data['prodrug'] = this.prodrug;
-    data['structure_type'] = this.structureType;
-    data['therapeutic_flag'] = this.therapeuticFlag;
-    data['topical'] = this.topical;
-    data['usan_stem'] = this.usanStem;
-    data['usan_stem_definition'] = this.usanStemDefinition;
-    data['usan_substem'] = this.usanSubstem;
-    data['usan_year'] = this.usanYear;
-    data['withdrawn_class'] = this.withdrawnClass;
-    data['withdrawn_country'] = this.withdrawnCountry;
-    data['withdrawn_flag'] = this.withdrawnFlag;
-    data['withdrawn_reason'] = this.withdrawnReason;
-    data['withdrawn_year'] = this.withdrawnYear;
+    data['xref_id'] = this.xrefId;
+    data['xref_name'] = this.xrefName;
+    data['xref_src'] = this.xrefSrc;
     return data;
   }
 }
@@ -225,90 +182,29 @@ class MoleculeHierarchy {
   }
 }
 
-class Bioterapeutic{
-  
-}
-
-class CrossReferences {
-  List<MoleculeChemicals> molecule;
-
-  CrossReferences({this.molecule});
-
-  CrossReferences.fromJson(Map<String, dynamic> json) {
-    molecule = new List<MoleculeChemicals>();
-    if (json['molecule'].toString().startsWith("[")) {
-      if (json['molecule'] != null) {
-        json['molecule'].forEach((v) {
-          molecule.add(new MoleculeChemicals.fromJson(v));
-        });
-      }
-    } else {
-      molecule.add(new MoleculeChemicals.fromJson(json['molecule']));
-    }
-  }
-}
-
-class MoleculeChemicals {
-  String xrefId;
-  String xrefName;
-  String xrefSrc;
-
-  MoleculeChemicals({this.xrefId, this.xrefName, this.xrefSrc});
-
-  MoleculeChemicals.fromJson(Map<String, dynamic> json) {
-    xrefId = json['xref_id'];
-    xrefName = json['xref_name'];
-    xrefSrc = json['xref_src'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['xref_id'] = this.xrefId;
-    data['xref_name'] = this.xrefName;
-    data['xref_src'] = this.xrefSrc;
-    return data;
-  }
-}
-
-class AtcClassifications {
-  String level5;
-
-  AtcClassifications({this.level5});
-
-  AtcClassifications.fromJson(Map<String, dynamic> json) {
-    level5 = json['level5'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['level5'] = this.level5;
-    return data;
-  }
-}
-
 class MoleculeProperties {
   String acdLogd;
   String acdLogp;
   String acdMostApka;
   String acdMostBpka;
   String alogp;
-  String aromaticRings;
+  int aromaticRings;
   String fullMolformula;
   String fullMwt;
-  String hba;
-  String hbaLipinski;
-  String hbd;
-  String hbdLipinski;
-  String heavyAtoms;
+  int hba;
+  int hbaLipinski;
+  int hbd;
+  int hbdLipinski;
+  int heavyAtoms;
   String molecularSpecies;
   String mwFreebase;
   String mwMonoisotopic;
-  String numLipinskiRo5Violations;
-  String numRo5Violations;
+  int numLipinskiRo5Violations;
+  int numRo5Violations;
   String psa;
   String qedWeighted;
   String ro3Pass;
-  String rtb;
+  int rtb;
 
   MoleculeProperties(
       {this.acdLogd,
@@ -335,28 +231,30 @@ class MoleculeProperties {
       this.rtb});
 
   MoleculeProperties.fromJson(Map<String, dynamic> json) {
-    acdLogd = json['acd_logd'];
-    acdLogp = json['acd_logp'];
-    acdMostApka = json['acd_most_apka'];
-    acdMostBpka = json['acd_most_bpka'];
-    alogp = json['alogp'];
-    aromaticRings = json['aromatic_rings'];
-    fullMolformula = json['full_molformula'];
-    fullMwt = json['full_mwt'];
-    hba = json['hba'];
-    hbaLipinski = json['hba_lipinski'];
-    hbd = json['hbd'];
-    hbdLipinski = json['hbd_lipinski'];
-    heavyAtoms = json['heavy_atoms'];
-    molecularSpecies = json['molecular_species'];
-    mwFreebase = json['mw_freebase'];
-    mwMonoisotopic = json['mw_monoisotopic'];
-    numLipinskiRo5Violations = json['num_lipinski_ro5_violations'];
-    numRo5Violations = json['num_ro5_violations'];
-    psa = json['psa'];
-    qedWeighted = json['qed_weighted'];
-    ro3Pass = json['ro3_pass'];
-    rtb = json['rtb'];
+    if (json != null) {
+      acdLogd = json['acd_logd'];
+      acdLogp = json['acd_logp'];
+      acdMostApka = json['acd_most_apka'];
+      acdMostBpka = json['acd_most_bpka'];
+      alogp = json['alogp'];
+      aromaticRings = json['aromatic_rings'];
+      fullMolformula = json['full_molformula'];
+      fullMwt = json['full_mwt'];
+      hba = json['hba'];
+      hbaLipinski = json['hba_lipinski'];
+      hbd = json['hbd'];
+      hbdLipinski = json['hbd_lipinski'];
+      heavyAtoms = json['heavy_atoms'];
+      molecularSpecies = json['molecular_species'];
+      mwFreebase = json['mw_freebase'];
+      mwMonoisotopic = json['mw_monoisotopic'];
+      numLipinskiRo5Violations = json['num_lipinski_ro5_violations'];
+      numRo5Violations = json['num_ro5_violations'];
+      psa = json['psa'];
+      qedWeighted = json['qed_weighted'];
+      ro3Pass = json['ro3_pass'];
+      rtb = json['rtb'];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -387,60 +285,6 @@ class MoleculeProperties {
   }
 }
 
-class MoleculeSynonyms {
-  List<Synonym> synonym;
-
-  MoleculeSynonyms({this.synonym});
-
-  MoleculeSynonyms.fromJson(Map<String, dynamic> json) {
-    if (json['synonym'] != null) {
-      synonym = new List<Synonym>();
-      if (json['synonym'].toString().startsWith("[")) {
-        json['synonym'].forEach((f) {
-          synonym.add(new Synonym.fromJson(f));
-        });
-      } else {
-        synonym.add(new Synonym.fromJson(json['synonym']));
-      }
-    }
-  }
-  // MoleculeSynonyms.fromJson(Map<String, dynamic> json) {
-  //   synonym =
-  //       json['synonym'] != null ? new Synonym.fromJson(json['synonym']) : null;
-  // }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-
-    if (this.synonym != null) {
-      data['synonym'] = this.synonym.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Synonym {
-  String moleculeSynonym;
-  String synType;
-  String synonyms;
-
-  Synonym({this.moleculeSynonym, this.synType, this.synonyms});
-
-  Synonym.fromJson(Map<String, dynamic> json) {
-    moleculeSynonym = json['molecule_synonym'];
-    synType = json['syn_type'];
-    synonyms = json['synonyms'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['molecule_synonym'] = this.moleculeSynonym;
-    data['syn_type'] = this.synType;
-    data['synonyms'] = this.synonyms;
-    return data;
-  }
-}
-
 class MoleculeStructures {
   String canonicalSmiles;
   String standardInchi;
@@ -460,6 +304,28 @@ class MoleculeStructures {
     data['canonical_smiles'] = this.canonicalSmiles;
     data['standard_inchi'] = this.standardInchi;
     data['standard_inchi_key'] = this.standardInchiKey;
+    return data;
+  }
+}
+
+class MoleculeSynonyms {
+  String moleculeSynonym;
+  String synType;
+  String synonyms;
+
+  MoleculeSynonyms({this.moleculeSynonym, this.synType, this.synonyms});
+
+  MoleculeSynonyms.fromJson(Map<String, dynamic> json) {
+    moleculeSynonym = json['molecule_synonym'];
+    synType = json['syn_type'];
+    synonyms = json['synonyms'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['molecule_synonym'] = this.moleculeSynonym;
+    data['syn_type'] = this.synType;
+    data['synonyms'] = this.synonyms;
     return data;
   }
 }

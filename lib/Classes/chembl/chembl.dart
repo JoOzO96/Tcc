@@ -1,23 +1,3 @@
-class Chembl {
-  ChemblIdLookup chemblIdLookup;
-
-  Chembl({this.chemblIdLookup});
-
-  Chembl.fromJson(Map<String, dynamic> json) {
-    chemblIdLookup = json['chembl_id_lookup'] != null
-        ? new ChemblIdLookup.fromJson(json['chembl_id_lookup'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.chemblIdLookup != null) {
-      data['chembl_id_lookup'] = this.chemblIdLookup.toJson();
-    }
-    return data;
-  }
-}
-
 class ChemblIdLookup {
   String chemblId;
   String entityType;

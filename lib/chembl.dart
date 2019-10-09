@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:unidb/Classes/chembl/chemblmolecule.dart';
 
 class ChemblCard extends StatefulWidget {
-  final ChemblMolecule _chemblMolecule;
+  final Molecule _chemblMolecule;
   ChemblCard(this._chemblMolecule);
 
   @override
@@ -16,25 +16,25 @@ class _ChemblCardState extends State<ChemblCard> {
   List<String> lista = new List();
   @override
   Widget build(BuildContext context) {
-    if (widget._chemblMolecule.molecule.moleculeSynonyms != null) {
+    if (widget._chemblMolecule.moleculeSynonyms != null) {
       for (int i = 0;
-          widget._chemblMolecule.molecule.moleculeSynonyms.synonym.length > i;
+          widget._chemblMolecule.moleculeSynonyms.synonym.length > i;
           i++) {
-        if (widget._chemblMolecule.molecule.moleculeSynonyms.synonym
+        if (widget._chemblMolecule.moleculeSynonyms.synonym
                 .elementAt(i)
                 .moleculeSynonym !=
             null) {
           if (!lista.contains(widget
-              ._chemblMolecule.molecule.moleculeSynonyms.synonym
+              ._chemblMolecule.moleculeSynonyms.synonym
               .elementAt(i)
               .moleculeSynonym)) {
             listaNomes = listaNomes +
                 "" +
-                widget._chemblMolecule.molecule.moleculeSynonyms.synonym
+                widget._chemblMolecule.moleculeSynonyms.synonym
                     .elementAt(i)
                     .moleculeSynonym +
                 "\n";
-            lista.add(widget._chemblMolecule.molecule.moleculeSynonyms.synonym
+            lista.add(widget._chemblMolecule.moleculeSynonyms.synonym
                 .elementAt(i)
                 .moleculeSynonym);
             if (lista.length ==5){
@@ -64,23 +64,23 @@ class _ChemblCardState extends State<ChemblCard> {
         children: <Widget>[
           new Text(
               "CHEMBLID: " +
-                  widget._chemblMolecule.molecule.moleculeHierarchy
+                  widget._chemblMolecule.moleculeHierarchy
                       .moleculeChemblId,
               style: subHeaderTextStyle),
-          new Text("Nome: " + widget._chemblMolecule.molecule.prefName,
+          new Text("Nome: " + widget._chemblMolecule.prefName,
               style: subHeaderTextStyle),
           new Text(
               "Administração oral: " +
-                  (widget._chemblMolecule.molecule.oral == true
+                  (widget._chemblMolecule.oral == true
                       ? "Sim"
                       : "Não"),
               style: subHeaderTextStyle),
           new Text(
               "Fórmula: " +
-                          widget._chemblMolecule.molecule.moleculeProperties
+                          widget._chemblMolecule.moleculeProperties
                               .fullMolformula !=
                       null
-                  ? widget._chemblMolecule.molecule.moleculeProperties
+                  ? widget._chemblMolecule.moleculeProperties
                       .fullMolformula
                   : "Sem informacoes",
               style: subHeaderTextStyle),
@@ -98,20 +98,20 @@ class _ChemblCardState extends State<ChemblCard> {
 
           new Text(
               "CHEMBLID: " +
-                  widget._chemblMolecule.molecule.moleculeHierarchy
+                  widget._chemblMolecule.moleculeHierarchy
                       .moleculeChemblId,
               style: subHeaderTextStyle),
-          // new Text("Nome: " + widget._chemblMolecule.molecule.prefName,
+          // new Text("Nome: " + widget._chemblMolecule.prefName,
           //     style: subHeaderTextStyle),
           // new Text(
           //     "Administração oral: " +
-          //         (widget._chemblMolecule.molecule.oral == true
+          //         (widget._chemblMolecule.oral == true
           //             ? "Sim"
           //             : "Não"),
           //     style: subHeaderTextStyle),
           new Text(
               "Formula: " +
-                  widget._chemblMolecule.molecule.moleculeProperties
+                  widget._chemblMolecule.moleculeProperties
                       .fullMolformula,
               style: subHeaderTextStyle),
           // new Text("Sinonimos: " + listaNomes, style: subHeaderTextStyle)
