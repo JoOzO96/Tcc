@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:unidb/Classes/chembl/chemblmolecule.dart';
 
 class ChemblCard extends StatefulWidget {
-  final Molecule _chemblMolecule;
+  final Quimicos _chemblMolecule;
   ChemblCard(this._chemblMolecule);
 
   @override
@@ -18,23 +18,23 @@ class _ChemblCardState extends State<ChemblCard> {
   Widget build(BuildContext context) {
     if (widget._chemblMolecule.moleculeSynonyms != null) {
       for (int i = 0;
-          widget._chemblMolecule.moleculeSynonyms.synonym.length > i;
+          widget._chemblMolecule.moleculeSynonyms.length > i;
           i++) {
-        if (widget._chemblMolecule.moleculeSynonyms.synonym
+        if (widget._chemblMolecule.moleculeSynonyms
                 .elementAt(i)
                 .moleculeSynonym !=
             null) {
           if (!lista.contains(widget
-              ._chemblMolecule.moleculeSynonyms.synonym
+              ._chemblMolecule.moleculeSynonyms
               .elementAt(i)
               .moleculeSynonym)) {
             listaNomes = listaNomes +
                 "" +
-                widget._chemblMolecule.moleculeSynonyms.synonym
+                widget._chemblMolecule.moleculeSynonyms
                     .elementAt(i)
                     .moleculeSynonym +
                 "\n";
-            lista.add(widget._chemblMolecule.moleculeSynonyms.synonym
+            lista.add(widget._chemblMolecule.moleculeSynonyms
                 .elementAt(i)
                 .moleculeSynonym);
             if (lista.length ==5){

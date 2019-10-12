@@ -25,8 +25,8 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
   String resposta = "";
   String mensagem = "";
   Xml2Json xml2json = new Xml2Json();
-  Molecule chemblMolecule = new Molecule();
-  List<Molecule> listaMoleculas = new List();
+  Quimicos chemblMolecule = new Quimicos();
+  List<Quimicos> listaMoleculas = new List();
   @override
   void initState() {
     super.initState();
@@ -67,7 +67,7 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
       response = await http.get("https://www.ebi.ac.uk" +
           listaCheml.elementAt(i).resourceUrl +
           "?format=json");
-          print("https://www.ebi.ac.uk" +
+      print("https://www.ebi.ac.uk" +
           listaCheml.elementAt(i).resourceUrl +
           "?format=json");
       resposta = response.body;

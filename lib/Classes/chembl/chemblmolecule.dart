@@ -1,16 +1,16 @@
 class Quimicos {
-  List<Null> atcClassifications;
+  // List<Null> atcClassifications;
   String availabilityType;
-  Null biotherapeutic;
+  // Null biotherapeutic;
   String blackBoxWarning;
-  Null chebiParId;
+  int chebiParId;
   String chirality;
   List<CrossReferences> crossReferences;
   bool dosedIngredient;
-  Null firstApproval;
+  int firstApproval;
   String firstInClass;
-  Null helmNotation;
-  Null indicationClass;
+  // Null helmNotation;
+  // Null indicationClass;
   String inorganicFlag;
   int maxPhase;
   String moleculeChemblId;
@@ -31,17 +31,18 @@ class Quimicos {
   String usanStem;
   String usanStemDefinition;
   String usanSubstem;
-  String usanYear;
+  int usanYear;
   String withdrawnClass;
   String withdrawnCountry;
-  String withdrawnFlag;
+  bool withdrawnFlag;
   String withdrawnReason;
   String withdrawnYear;
 
   Quimicos(
-      {this.atcClassifications,
+      {
+        // this.atcClassifications,
       this.availabilityType,
-      this.biotherapeutic,
+      // this.biotherapeutic,
       this.blackBoxWarning,
       this.chebiParId,
       this.chirality,
@@ -49,8 +50,8 @@ class Quimicos {
       this.dosedIngredient,
       this.firstApproval,
       this.firstInClass,
-      this.helmNotation,
-      this.indicationClass,
+      // this.helmNotation,
+      // this.indicationClass,
       this.inorganicFlag,
       this.maxPhase,
       this.moleculeChemblId,
@@ -79,14 +80,14 @@ class Quimicos {
       this.withdrawnYear});
 
   Quimicos.fromJson(Map<String, dynamic> json) {
-    if (json['atc_classifications'] != null) {
-      atcClassifications = new List<Null>();
-      json['atc_classifications'].forEach((v) {
-        // atcClassifications.add(new Null.fromJson(v));
-      });
-    }
+    // if (json['atc_classifications'] != null) {
+    //   atcClassifications = new List<Null>();
+    //   json['atc_classifications'].forEach((v) {
+    //     // atcClassifications.add(new Null.fromJson(v));
+    //   });
+    // }
     availabilityType = json['availability_type'];
-    biotherapeutic = json['biotherapeutic'];
+    // biotherapeutic = json['biotherapeutic'];
     blackBoxWarning = json['black_box_warning'];
     chebiParId = json['chebi_par_id'];
     chirality = json['chirality'];
@@ -96,11 +97,11 @@ class Quimicos {
         crossReferences.add(new CrossReferences.fromJson(v));
       });
     }
-    dosedIngredient = json['dosed_ingredient'];
+    dosedIngredient = json['dosed_ingredient'] != null ? json['dosed_ingredient'] : false ;
     firstApproval = json['first_approval'];
     firstInClass = json['first_in_class'];
-    helmNotation = json['helm_notation'];
-    indicationClass = json['indication_class'];
+    // helmNotation = json['helm_notation'];
+    // indicationClass = json['indication_class'];
     inorganicFlag = json['inorganic_flag'];
     maxPhase = json['max_phase'];
     moleculeChemblId = json['molecule_chembl_id'].toString();
@@ -121,21 +122,21 @@ class Quimicos {
     }
     moleculeType = json['molecule_type'];
     naturalProduct = json['natural_product'];
-    oral = json['oral'];
-    parenteral = json['parenteral'];
-    polymerFlag = json['polymer_flag'];
-    prefName = json['pref_name'];
+    oral = json['oral'] != null ? json['oral'] : false ;
+    parenteral = json['parenteral'] != null ? json['parenteral'] : false;
+    polymerFlag = json['polymer_flag'] != null ? json['polymer_flag'] : false;
+    prefName = json['pref_name'] != null ? json['pref_name'] : "No name" ;
     prodrug = json['prodrug'];
     structureType = json['structure_type'];
-    therapeuticFlag = json['therapeutic_flag'];
-    topical = json['topical'];
+    therapeuticFlag = json['therapeutic_flag'] != null ? json['therapeutic_flag'] : false;
+    topical = json['topical'] != null ? json['topical'] : false;
     usanStem = json['usan_stem'];
     usanStemDefinition = json['usan_stem_definition'];
     usanSubstem = json['usan_substem'];
     usanYear = json['usan_year'];
     withdrawnClass = json['withdrawn_class'];
     withdrawnCountry = json['withdrawn_country'];
-    withdrawnFlag = json['withdrawn_flag'];
+    withdrawnFlag = json['withdrawn_flag'] != null ? json['withdrawn_flag'] : false;
     withdrawnReason = json['withdrawn_reason'];
     withdrawnYear = json['withdrawn_year'];
   }

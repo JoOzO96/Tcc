@@ -23,6 +23,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
   String criteriosSelecao = "";
   String dadosDisgenet = "";
   bool montarTela = true;
+  bool naoPossuiLista = false;
   List<Disgenet> disgenet0 = new List();
   Future<List<Disgenet>> disgenet1;
   Future<List<Disgenet>> disgenet2;
@@ -154,6 +155,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
               listCondicaoParticipantes.elementAt(i) + ", ";
         }
       }
+
       if (listCondicaoParticipantes.length > 0) {
         controle1 = false;
         disgenet1 = criaTicketDisgenet(listCondicaoParticipantes.elementAt(0));
@@ -252,10 +254,17 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             });
           });
         }
-        print("oi");
+      }else{
+        setState(() {
+          naoPossuiLista = true;
+         });
+        
       }
     } else {
       condicaoParticipantes = "Não informado.";
+      setState(() {
+          naoPossuiLista = true;
+         });
     }
 
     if (widget.study.protocolSection.eligibilityModule != null) {
@@ -306,11 +315,10 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
     final regularTextStyle = baseTextStyle.copyWith(
         color: Colors.black87, fontSize: 9.0, fontWeight: FontWeight.w400);
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 20.0);
-
     if (consultaDisgenet == false) {
       return new Scaffold(
           floatingActionButton:
-              new FloatingActionButton(onPressed: () => Navigator.pop(context)),
+              new FloatingActionButton(child: Icon(Icons.arrow_back_ios), onPressed: () => Navigator.pop(context)),
           body: new SafeArea(
             child: Container(
               child: CustomScrollView(
@@ -323,7 +331,8 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                             nomeParticipantes,
                             condicaoParticipantes,
                             criteriosSelecao,
-                            consultaDisgenet),
+                            consultaDisgenet,
+                            naoPossuiLista),
                       ],
                     ),
                   ),
@@ -356,7 +365,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet),
+                              consultaDisgenet,naoPossuiLista),
                         ],
                       ),
                     ),
@@ -406,7 +415,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet),
+                              consultaDisgenet,naoPossuiLista),
                         ],
                       ),
                     ),
@@ -472,7 +481,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet),
+                              consultaDisgenet,naoPossuiLista),
                         ],
                       ),
                     ),
@@ -554,7 +563,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet),
+                              consultaDisgenet,naoPossuiLista),
                         ],
                       ),
                     ),
@@ -651,7 +660,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet),
+                              consultaDisgenet,naoPossuiLista),
                         ],
                       ),
                     ),
@@ -748,8 +757,9 @@ class TextoWidget extends StatelessWidget {
   final String condicaoParticipantes;
   final String criteriosSelecao;
   final bool consultaDisgenet;
+  final bool naoPossuiLista;
   TextoWidget(this.study, this.nomeParticipantes, this.condicaoParticipantes,
-      this.criteriosSelecao, this.consultaDisgenet);
+      this.criteriosSelecao, this.consultaDisgenet, this.naoPossuiLista);
 
   @override
   Widget build(BuildContext context) {
@@ -757,7 +767,7 @@ class TextoWidget extends StatelessWidget {
     final regularTextStyle = baseTextStyle.copyWith(
         color: Colors.black87, fontSize: 9.0, fontWeight: FontWeight.w400);
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 20.0);
-    if (consultaDisgenet == false) {
+    if (consultaDisgenet == false && naoPossuiLista == false) {
       return new Column(
         children: <Widget>[
           new Text(
@@ -808,6 +818,13 @@ class TextoWidget extends StatelessWidget {
               style: subHeaderTextStyle),
           new Text(" "),
           new Text("Dados dos DISGENET: ", style: subHeaderTextStyle),
+          new Text("Não especificado doenças no estudo", style: subHeaderTextStyle),
+          new Text(" "),
+          new Text(" "),
+          new Text(" "),
+          new Text(" "),
+          new Text(" "),
+          new Text(" "),
         ],
       );
     }
