@@ -8,6 +8,7 @@ import 'package:unidb/Classes/pubmed/pubmed.dart';
 import 'package:unidb/chembl.dart';
 import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:xml2json/xml2json.dart';
 
 class PubMedScreen extends StatefulWidget {
   final String uniprot;
@@ -21,7 +22,7 @@ class PubMedScreenState extends State<PubMedScreen> {
   bool consultaconcluida = false;
   DateTime dataFim = new DateTime.now();
   DateTime dataInicio = DateTime(1990, 1, 1);
-
+  Xml2Json xml2json = new Xml2Json();
   @override
   void initState() {
     super.initState();
@@ -46,24 +47,18 @@ class PubMedScreenState extends State<PubMedScreen> {
             "/" +
             dataInicio.day.toString() +
             "&format=json");
-    print(
-        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" +
-            widget.uniprot +
-            "&retmax=100&usehistory=y&maxdate=" +
-            dataFim.year.toString() +
-            "/" +
-            dataFim.month.toString() +
-            "/" +
-            dataFim.day.toString() +
-            "&mindate=" +
-            dataInicio.year.toString() +
-            "/" +
-            dataInicio.month.toString() +
-            "/" +
-            dataInicio.day.toString() +
-            "&format=json");
     Map userMap = json.decode(response.body);
     eutilspubmed = Etuilspubmed.fromJson(userMap);
+
+    for (int i = 0; eutilspubmed.esearchresult.idlist.length > i; i++) {
+      response = await http.get(
+          "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=" +
+              eutilspubmed.esearchresult.idlist.elementAt(i) +
+              "&format=xml");
+      xml2json.parse(response.body);
+      String teste = xml2json.toBadgerfish();
+      print("oi");
+    }
 
     setState(() {
       consultaconcluida = true;
@@ -108,11 +103,8 @@ class PubMedScreenState extends State<PubMedScreen> {
                               dataInicio = date;
                               consultaconcluida = false;
                               testeconsulta();
-                              
                             });
-                          },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.pt);
+                          }, currentTime: dataInicio, locale: LocaleType.pt);
                         },
                         child: Text(
                           "Data Inicio: " +
@@ -146,9 +138,7 @@ class PubMedScreenState extends State<PubMedScreen> {
                               consultaconcluida = false;
                               testeconsulta();
                             });
-                          },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.pt);
+                          }, currentTime: dataFim, locale: LocaleType.pt);
                         },
                         child: Text(
                           "Data Fim: " +
@@ -164,6 +154,15 @@ class PubMedScreenState extends State<PubMedScreen> {
                 childCount: 2,
               ),
             ),
+            // SliverGrid(
+            //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //               crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+            //           delegate: new SliverChildBuilderDelegate(
+            //             (context, index) =>
+            //                 new PubmedCard(eutilspubmed.esearchresult.idlist[index]),
+            //             childCount: eutilspubmed.esearchresult.idlist.length,
+            //           ),
+            //         ),
           ]),
         )),
       );
