@@ -3,6 +3,7 @@ import 'package:unidb/clinicalestudo.dart';
 import 'package:unidb/consulta.dart';
 import 'package:unidb/drugtargetscreen.dart';
 import 'package:unidb/home.dart';
+import 'package:unidb/pubmedscreen.dart';
 
 class Routes {
   Routes() {
@@ -35,6 +36,12 @@ class Routes {
           case '/drugtargetscreen':
             return new MyCustomRoute(
               builder: (_) => new DrugTargetScreen(settings.arguments),
+              settings: settings,
+            );
+        }switch (settings.name) {
+          case '/pubmedscreen':
+            return new MyCustomRoute(
+              builder: (_) => new PubMedScreen(settings.arguments),
               settings: settings,
             );
         }

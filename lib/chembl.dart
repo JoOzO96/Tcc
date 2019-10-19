@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:unidb/Classes/chembl/chemblmolecule.dart';
+import 'package:unidb/Classes/pubmed/pubmed.dart';
 
 class ChemblCard extends StatefulWidget {
   final Quimicos _chemblMolecule;
@@ -13,38 +16,66 @@ class ChemblCard extends StatefulWidget {
 class _ChemblCardState extends State<ChemblCard> {
   bool segue = false;
   String listaNomes = "";
+  String formula = "No information";
   List<String> lista = new List();
+  Etuilspubmed eutilspubmed = new Etuilspubmed();
+  String trabalhosPubmed = "0";
+
+  @override
+  void initState() {
+    super.initState();
+    testeconsulta();
+  }
+
+  testeconsulta() async {
+    try {
+      var response = await http.get(
+          "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" +
+              widget._chemblMolecule.prefName +
+              "&retmax=100&usehistory=y&format=json");
+      print(
+          "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" +
+              widget._chemblMolecule.prefName +
+              "&retmax=100&usehistory=y&format=json");
+      Map userMap = json.decode(response.body);
+      eutilspubmed = Etuilspubmed.fromJson(userMap);
+      trabalhosPubmed = eutilspubmed.esearchresult.retmax;
+      if ( eutilspubmed.esearchresult.retmax == "100"){
+        trabalhosPubmed = "> 100";
+      }
+      setState(() {});
+    } on Error catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget._chemblMolecule.moleculeSynonyms != null) {
-      for (int i = 0;
-          widget._chemblMolecule.moleculeSynonyms.length > i;
-          i++) {
+      for (int i = 0; widget._chemblMolecule.moleculeSynonyms.length > i; i++) {
         if (widget._chemblMolecule.moleculeSynonyms
                 .elementAt(i)
                 .moleculeSynonym !=
             null) {
-          if (!lista.contains(widget
-              ._chemblMolecule.moleculeSynonyms
+          if (!lista.contains(widget._chemblMolecule.moleculeSynonyms
               .elementAt(i)
               .moleculeSynonym)) {
-            listaNomes = listaNomes +
-                "" +
-                widget._chemblMolecule.moleculeSynonyms
-                    .elementAt(i)
-                    .moleculeSynonym +
-                "\n";
+            listaNomes = listaNomes + "" +  widget._chemblMolecule.moleculeSynonyms.elementAt(i).moleculeSynonym +     "\n";
             lista.add(widget._chemblMolecule.moleculeSynonyms
                 .elementAt(i)
                 .moleculeSynonym);
-            if (lista.length ==5){
-              break;
-            }
+          }
+          if (lista.length >= 5) {
+            break;
           }
         }
       }
     } else {
       listaNomes = "Sem sinonimos";
+    }
+
+    if (widget._chemblMolecule.moleculeProperties != null) {
+      if (widget._chemblMolecule.moleculeProperties.fullMolformula != null) {
+        formula = widget._chemblMolecule.moleculeProperties.fullMolformula;
+      }
     }
 
     final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
@@ -59,66 +90,23 @@ class _ChemblCardState extends State<ChemblCard> {
         child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[]));
+
     var planetCardContent2 = new Flexible(
       child: new Column(
         children: <Widget>[
           new Text(
               "CHEMBLID: " +
-                  widget._chemblMolecule.moleculeHierarchy
-                      .moleculeChemblId,
+                  widget._chemblMolecule.moleculeHierarchy.moleculeChemblId,
               style: subHeaderTextStyle),
-          new Text("Nome: " + widget._chemblMolecule.prefName,
-              style: subHeaderTextStyle),
-          new Text(
-              "Administração oral: " +
-                  (widget._chemblMolecule.oral == true
-                      ? "Sim"
-                      : "Não"),
+          new Text("Name: " + widget._chemblMolecule.prefName,
               style: subHeaderTextStyle),
           new Text(
-              "Fórmula: " +
-                          widget._chemblMolecule.moleculeProperties
-                              .fullMolformula !=
-                      null
-                  ? widget._chemblMolecule.moleculeProperties
-                      .fullMolformula
-                  : "Sem informacoes",
+              "Oral: " + (widget._chemblMolecule.oral == true ? "Yes" : "No"),
               style: subHeaderTextStyle),
-          new Text("Sinonimos: " + listaNomes, style: subHeaderTextStyle)
-        ],
-      ),
-    );
-    planetCardContent = new Container(
-      margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
-      constraints: new BoxConstraints.expand(),
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Container(height: 2.0),
-
-          new Text(
-              "CHEMBLID: " +
-                  widget._chemblMolecule.moleculeHierarchy
-                      .moleculeChemblId,
+          new Text("Formula: " + formula, style: subHeaderTextStyle),
+          new Text("Synonym: " + listaNomes, style: subHeaderTextStyle),
+          new Text("PubMed : " + trabalhosPubmed + " references",
               style: subHeaderTextStyle),
-          // new Text("Nome: " + widget._chemblMolecule.prefName,
-          //     style: subHeaderTextStyle),
-          // new Text(
-          //     "Administração oral: " +
-          //         (widget._chemblMolecule.oral == true
-          //             ? "Sim"
-          //             : "Não"),
-          //     style: subHeaderTextStyle),
-          new Text(
-              "Formula: " +
-                  widget._chemblMolecule.moleculeProperties
-                      .fullMolformula,
-              style: subHeaderTextStyle),
-          // new Text("Sinonimos: " + listaNomes, style: subHeaderTextStyle)
-          // new Text("Simbolo: " + widget.disgenet.geneSymbol,
-          //     style: subHeaderTextStyle),
-          // new Text("Score: " + widget.disgenet.score.toString(),
-          //     style: subHeaderTextStyle),
         ],
       ),
     );
@@ -151,10 +139,11 @@ class _ChemblCardState extends State<ChemblCard> {
                 horizontal: 16.0,
               ),
               child: planetCard)),
+      onTap: () => criatela(widget._chemblMolecule.prefName)
     );
   }
 
-  criatela(String uniprotid) {
-    Navigator.pushNamed(context, "/drugtargetscreen", arguments: uniprotid);
+  criatela(String prefName) {
+    Navigator.pushNamed(context, "/pubmedscreen", arguments: prefName);
   }
 }

@@ -87,7 +87,7 @@ class HomeScreenState extends State<HomeScreen> {
       url = "https://clinicaltrials.gov/api/query/full_studies?expr=" +
           _filter.text +
           " AND disease&fmt=JSON&min_rnk=1&max_rnk=100";
-      print(url);
+
       response = await http.get(url).catchError((e) => setState(() {
             consultaConcluida = false;
             consulta = false;
@@ -100,8 +100,7 @@ class HomeScreenState extends State<HomeScreen> {
             FullStudiesResponse.fromJson(userMap['FullStudiesResponse']);
         
         // print('Howdy, ${testesClinicos.fullStudiesResponse.expression}, com um total de ${testesClinicos.fullStudiesResponse.nstudiesfound} estudos encontrados!');
-        testeClinico.fullStudies = testeClinico.fullStudies.where((p) => p.study.protocolSection.conditionsModule.conditionList.condition.toList().length >3).toList();
-        //print(resposta);
+       //print(resposta);
         setState(() {
           consultaConcluida = true;
         });

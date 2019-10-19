@@ -40,7 +40,7 @@ class Quimicos {
 
   Quimicos(
       {
-        // this.atcClassifications,
+      // this.atcClassifications,
       this.availabilityType,
       // this.biotherapeutic,
       this.blackBoxWarning,
@@ -97,7 +97,8 @@ class Quimicos {
         crossReferences.add(new CrossReferences.fromJson(v));
       });
     }
-    dosedIngredient = json['dosed_ingredient'] != null ? json['dosed_ingredient'] : false ;
+    dosedIngredient =
+        json['dosed_ingredient'] != null ? json['dosed_ingredient'] : false;
     firstApproval = json['first_approval'];
     firstInClass = json['first_in_class'];
     // helmNotation = json['helm_notation'];
@@ -122,13 +123,14 @@ class Quimicos {
     }
     moleculeType = json['molecule_type'];
     naturalProduct = json['natural_product'];
-    oral = json['oral'] != null ? json['oral'] : false ;
+    oral = json['oral'] != null ? json['oral'] : false;
     parenteral = json['parenteral'] != null ? json['parenteral'] : false;
     polymerFlag = json['polymer_flag'] != null ? json['polymer_flag'] : false;
-    prefName = json['pref_name'] != null ? json['pref_name'] : "No name" ;
+    prefName = json['pref_name'] != null ? json['pref_name'] : "No name";
     prodrug = json['prodrug'];
     structureType = json['structure_type'];
-    therapeuticFlag = json['therapeutic_flag'] != null ? json['therapeutic_flag'] : false;
+    therapeuticFlag =
+        json['therapeutic_flag'] != null ? json['therapeutic_flag'] : false;
     topical = json['topical'] != null ? json['topical'] : false;
     usanStem = json['usan_stem'];
     usanStemDefinition = json['usan_stem_definition'];
@@ -136,7 +138,8 @@ class Quimicos {
     usanYear = json['usan_year'];
     withdrawnClass = json['withdrawn_class'];
     withdrawnCountry = json['withdrawn_country'];
-    withdrawnFlag = json['withdrawn_flag'] != null ? json['withdrawn_flag'] : false;
+    withdrawnFlag =
+        json['withdrawn_flag'] != null ? json['withdrawn_flag'] : false;
     withdrawnReason = json['withdrawn_reason'];
     withdrawnYear = json['withdrawn_year'];
   }
@@ -233,28 +236,35 @@ class MoleculeProperties {
 
   MoleculeProperties.fromJson(Map<String, dynamic> json) {
     if (json != null) {
-      acdLogd = json['acd_logd'];
-      acdLogp = json['acd_logp'];
-      acdMostApka = json['acd_most_apka'];
-      acdMostBpka = json['acd_most_bpka'];
-      alogp = json['alogp'];
-      aromaticRings = json['aromatic_rings'];
-      fullMolformula = json['full_molformula'];
-      fullMwt = json['full_mwt'];
-      hba = json['hba'];
-      hbaLipinski = json['hba_lipinski'];
-      hbd = json['hbd'];
-      hbdLipinski = json['hbd_lipinski'];
-      heavyAtoms = json['heavy_atoms'];
-      molecularSpecies = json['molecular_species'];
-      mwFreebase = json['mw_freebase'];
-      mwMonoisotopic = json['mw_monoisotopic'];
-      numLipinskiRo5Violations = json['num_lipinski_ro5_violations'];
-      numRo5Violations = json['num_ro5_violations'];
-      psa = json['psa'];
-      qedWeighted = json['qed_weighted'];
-      ro3Pass = json['ro3_pass'];
-      rtb = json['rtb'];
+      acdLogd = json['acd_logd'] != null ? json['acd_logd'] : "";
+      acdLogp = json['acd_logp'] != null ? json['acd_logp'] : "";
+      acdMostApka = json['acd_most_apka'] != null ? json['acd_most_apka'] : "";
+      acdMostBpka = json['acd_most_bpka'] != null ? json['acd_most_bpka'] : "";
+      alogp = json['alogp'] != null ? json['alogp'] : "";
+      aromaticRings =
+          json['aromatic_rings'] != null ? json['aromatic_rings'] : 0;
+      fullMolformula =
+          json['full_molformula'] != null ? json['full_molformula'] : "";
+      fullMwt = json['full_mwt'] != null ? json['full_mwt'] : "";
+      hba = json['hba'] != null ? json['hba'] : 0;
+      hbaLipinski = json['hba_lipinski'] != null ? json['hba_lipinski'] : 0;
+      hbd = json['hbd'] != null ? json['hbd'] : 0;
+      hbdLipinski = json['hbd_lipinski'] != null ? json['hbd_lipinski'] : 0;
+      heavyAtoms = json['heavy_atoms'] != null ? json['heavy_atoms'] : 0;
+      molecularSpecies =
+          json['molecular_species'] != null ? json['molecular_species'] : "";
+      mwFreebase = json['mw_freebase'] != null ? json['mw_freebase'] : "";
+      mwMonoisotopic =
+          json['mw_monoisotopic'] != null ? json['mw_monoisotopic'] : "";
+      numLipinskiRo5Violations = json['num_lipinski_ro5_violations'] != null
+          ? json['num_lipinski_ro5_violations']
+          : "";
+      numRo5Violations =
+          json['num_ro5_violations'] != null ? json['num_ro5_violations'] : 0;
+      psa = json['psa'] != null ? json['psa'] : "";
+      qedWeighted = json['qed_weighted'] != null ? json['qed_weighted'] : "";
+      ro3Pass = json['ro3_pass'] != null ? json['ro3_pass'] : "";
+      rtb = json['rtb'] != null ? json['rtb'] : 0;
     }
   }
 

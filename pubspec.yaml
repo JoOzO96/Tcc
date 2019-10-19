@@ -28,6 +28,8 @@ dependencies:
   xml2json: ^3.0.3
   xpath: ^0.1.0
   html: ^0.14.0+2
+  flutter_range_slider: ^1.4.0
+  flutter_datetime_picker: ^1.2.6
 
 dev_dependencies:
   flutter_test:

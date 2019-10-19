@@ -6,6 +6,7 @@ import 'package:unidb/Classes/chembl/chembl.dart';
 import 'package:unidb/Classes/chembl/chemblmolecule.dart';
 import 'package:unidb/Classes/drugtarget/bioactivities.dart';
 import 'package:unidb/Classes/drugtarget/drugtargetcommons.dart';
+import 'package:unidb/Classes/pubmed/pubmed.dart';
 import 'package:unidb/chembl.dart';
 import 'package:xml2json/xml2json.dart';
 
@@ -27,6 +28,9 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
   Xml2Json xml2json = new Xml2Json();
   Quimicos chemblMolecule = new Quimicos();
   List<Quimicos> listaMoleculas = new List();
+  List<Quimicos> listaMoleculasTemp = new List();
+
+  bool adicionar = false;
   @override
   void initState() {
     super.initState();
@@ -34,58 +38,73 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
   }
 
   testeconsulta() async {
-    var response;
-    response = await http.get(
-        "https://drugtargetcommons.fimm.fi/api/data/bioactivity/?uniprot_id=" +
-            widget.uniprot +
-            "&format=json");
-    Map userMap = json.decode(response.body);
-    drugTarget = DrugTarget.fromJson(userMap);
-    bioactivities = drugTarget.bioactivities;
-    bioactivities = bioactivities.where((p) => p.chemblId != null).toList();
-
-    for (int i = 0; bioactivities.length > i; i++) {
+    try {
+      var response;
       response = await http.get(
-          "https://www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/" +
-              bioactivities.elementAt(i).chemblId +
-              "?format=json");
-      resposta = response.body;
-      Map mapChembl = json.decode(resposta);
-      chembl = ChemblIdLookup.fromJson(mapChembl);
-      setState(() {
-        mensagem = "CHEMBL: " +
-            i.toString() +
-            " de " +
-            bioactivities.length.toString() +
-            " interações.";
-      });
-      listaCheml.add(chembl);
-      listaCheml = listaCheml.where((p) => p.resourceUrl.isNotEmpty).toList();
-    }
+          "https://drugtargetcommons.fimm.fi/api/data/bioactivity/?uniprot_id=" +
+              widget.uniprot +
+              "&format=json");
+      Map userMap = json.decode(response.body);
+      drugTarget = DrugTarget.fromJson(userMap);
+      bioactivities = drugTarget.bioactivities;
+      bioactivities = bioactivities.where((p) => p.chemblId != null).toList();
 
-    for (int i = 0; listaCheml.length > i; i++) {
-      response = await http.get("https://www.ebi.ac.uk" +
-          listaCheml.elementAt(i).resourceUrl +
-          "?format=json");
-      print("https://www.ebi.ac.uk" +
-          listaCheml.elementAt(i).resourceUrl +
-          "?format=json");
-      resposta = response.body;
-      Map mapDados = json.decode(resposta);
-      chemblMolecule = Quimicos.fromJson(mapDados);
-      setState(() {
-        mensagem = "CHEMBL: " +
-            i.toString() +
-            " de " +
-            listaCheml.length.toString() +
-            " drogas consultadas.";
-      });
-      listaMoleculas.add(chemblMolecule);
-    }
+      for (int i = 0; bioactivities.length > i; i++) {
+        response = await http.get(
+            "https://www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/" +
+                bioactivities.elementAt(i).chemblId +
+                "?format=json");
+        resposta = response.body;
+        Map mapChembl = json.decode(resposta);
+        chembl = ChemblIdLookup.fromJson(mapChembl);
+        setState(() {
+          mensagem = "CHEMBL: " +
+              i.toString() +
+              " de " +
+              bioactivities.length.toString() +
+              " interações.";
+        });
+        listaCheml.add(chembl);
+        listaCheml = listaCheml.where((p) => p.resourceUrl.isNotEmpty).toList();
+      }
 
-    setState(() {
-      consultaconcluida = true;
-    });
+      for (int i = 0; listaCheml.length > i; i++) {
+        response = await http.get("https://www.ebi.ac.uk" +
+            listaCheml.elementAt(i).resourceUrl +
+            "?format=json");
+        resposta = response.body;
+        Map mapDados = json.decode(resposta);
+        chemblMolecule = Quimicos.fromJson(mapDados);
+        setState(() {
+          mensagem = "CHEMBL: " +
+              i.toString() +
+              " de " +
+              listaCheml.length.toString() +
+              " drogas consultadas.";
+        });
+        listaMoleculas.add(chemblMolecule);
+      }
+      listaMoleculas =
+          listaMoleculas.where((p) => p.prefName != "No name").toList();
+      listaMoleculasTemp = listaMoleculas.toList();
+      listaMoleculas.clear();
+      for (int i = 0; listaMoleculasTemp.length > i; i++) {
+        adicionar = true;
+        for (int j = 0; listaMoleculas.length > j; j++) {
+          if (listaMoleculas.elementAt(j).moleculeChemblId ==
+              listaMoleculasTemp.elementAt(i).moleculeChemblId) {
+            adicionar = false;
+          }
+        }
+        if (adicionar) {
+          listaMoleculas.add(listaMoleculasTemp.elementAt(i));
+        }
+      }
+
+      setState(() {
+        consultaconcluida = true;
+      });
+    } on Error catch (e) {}
   }
 
   @override

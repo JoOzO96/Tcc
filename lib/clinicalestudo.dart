@@ -172,6 +172,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             }
             disgenet1Final = resultList;
             controle1Final = true;
+            
           });
         });
         if (listCondicaoParticipantes.length > 1) {
@@ -378,7 +379,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -428,7 +429,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -444,7 +445,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet2Final[index]),
@@ -494,7 +495,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -510,7 +511,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet2Final[index]),
@@ -526,7 +527,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet3Final[index]),
@@ -576,7 +577,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -592,7 +593,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet2Final[index]),
@@ -608,7 +609,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet3Final[index]),
@@ -624,7 +625,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet4Final[index]),
@@ -673,7 +674,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -689,7 +690,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet2Final[index]),
@@ -705,7 +706,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet3Final[index]),
@@ -721,7 +722,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet5Final[index]),
@@ -789,7 +790,7 @@ class TextoWidget extends StatelessWidget {
           new Text("Critérios de seleção: " + criteriosSelecao,
               style: subHeaderTextStyle),
           new Text(" "),
-          new Text("Dados dos DISGENET: ", style: subHeaderTextStyle),
+          new Text("DISGENET: ", style: subHeaderTextStyle),
           new Text(" "),
           new CircularProgressIndicator(),
           new Text("Aguardando dados do DISGENET"),
@@ -817,14 +818,7 @@ class TextoWidget extends StatelessWidget {
           new Text("Critérios de seleção: " + criteriosSelecao,
               style: subHeaderTextStyle),
           new Text(" "),
-          new Text("Dados dos DISGENET: ", style: subHeaderTextStyle),
-          new Text("Não especificado doenças no estudo", style: subHeaderTextStyle),
-          new Text(" "),
-          new Text(" "),
-          new Text(" "),
-          new Text(" "),
-          new Text(" "),
-          new Text(" "),
+          new Text("DISGENET: ", style: subHeaderTextStyle),
         ],
       );
     }

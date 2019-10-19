@@ -22,14 +22,14 @@ class _DisgenetCardState extends State<DisgenetCard> {
         fontWeight: FontWeight.w400);
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
     var planetCardContent = new Container(
-        margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
+        margin: new EdgeInsets.fromLTRB(10, 10.0, 16.0, 16.0),
         constraints: new BoxConstraints.expand(),
         child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[]));
 
     planetCardContent = new Container(
-      margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
+      margin: new EdgeInsets.fromLTRB(16, 10.0, 16.0, 16.0),
       constraints: new BoxConstraints.expand(),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +48,7 @@ class _DisgenetCardState extends State<DisgenetCard> {
     final planetCard = new Container(
       child: planetCardContent,
       width: MediaQuery.of(context).size.height,
-      height: 130,
+      height: 90,
       margin: new EdgeInsets.only(left: 1),
       decoration: new BoxDecoration(
         color: new Color(0xFA333366),
@@ -67,7 +67,7 @@ class _DisgenetCardState extends State<DisgenetCard> {
     return new GestureDetector(
         child: Center(
             child: Container(
-                height: 130,
+                height: 90,
                 margin: const EdgeInsets.symmetric(
                   vertical: 16.0,
                   horizontal: 16.0,
