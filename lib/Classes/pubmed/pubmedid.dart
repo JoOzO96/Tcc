@@ -2497,21 +2497,25 @@ class Type1 {
 }
 
 class CommentsCorrectionsList {
-  CommentsCorrections commentsCorrections;
+  List<CommentsCorrections> commentsCorrections;
 
   CommentsCorrectionsList({this.commentsCorrections});
 
   CommentsCorrectionsList.fromJson(Map<String, dynamic> json) {
-    commentsCorrections = json['CommentsCorrections'] != null
-        ? new CommentsCorrections.fromJson(json['CommentsCorrections'])
-        : null;
+    commentsCorrections = new List();
+    if (json['CommentsCorrections'].toString().startsWith("[")) {
+      json['CommentsCorrections'].forEach((v) {
+        commentsCorrections.add(new CommentsCorrections.fromJson(v));
+      });
+    } else {
+      commentsCorrections
+          .add(new CommentsCorrections.fromJson(json['CommentsCorrections']));
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.commentsCorrections != null) {
-      data['CommentsCorrections'] = this.commentsCorrections.toJson();
-    }
+
     return data;
   }
 }
