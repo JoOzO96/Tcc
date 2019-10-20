@@ -9,6 +9,7 @@ import 'package:unidb/Classes/pubmed/pubmedid.dart';
 import 'package:unidb/chembl.dart';
 import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:unidb/pubmedcard.dart';
 import 'package:xml2json/xml2json.dart';
 
 class PubMedScreen extends StatefulWidget {
@@ -60,11 +61,11 @@ class PubMedScreenState extends State<PubMedScreen> {
 
     response = await http.get(
         "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=" +
-            // eutilspubmed.esearchresult.idlist.elementAt(i) +
+            // eutilspubmed.esearchresult.idlist.elementAt(0) + "," + eutilspubmed.esearchresult.idlist.elementAt(1) +
             request.substring(0, request.length - 1) +
             "&rettype=xml");
     String teste = response.body;
-    print(teste);
+    // print(teste);
 
     // teste = teste.toString().replaceAll(String.fromCharCode(34), "");
     // teste = teste.replaceAll("<?xml version=1.0 ?>", "");
@@ -74,11 +75,12 @@ class PubMedScreenState extends State<PubMedScreen> {
     xml2json.parse(teste);
     print(
         "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=" +
-            // eutilspubmed.esearchresult.idlist.elementAt(i) +
+            // eutilspubmed.esearchresult.idlist.elementAt(0) + "," + eutilspubmed.esearchresult.idlist.elementAt(1) +
             request.substring(0, request.length - 1) +
             "&rettype=xml");
     request = "";
-    teste = xml2json.toBadgerfish();
+    // teste = xml2json.toBadgerfish();
+    teste = xml2json.toGData();
     userMap = json.decode(teste);
     pubmedId = PubMedId.fromJson(userMap);
     setState(() {
@@ -177,10 +179,10 @@ class PubMedScreenState extends State<PubMedScreen> {
             ),
             // SliverGrid(
             //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //       crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+            //       crossAxisCount: 1, childAspectRatio: 2, mainAxisSpacing: 6),
             //   delegate: new SliverChildBuilderDelegate(
             //     (context, index) =>
-            //         new PubmedCard(pubmedId.pubmedArticleSet.pubmedArticle[index]),
+            //       new PubMedCard(pubmedId.pubmedArticleSet.pubmedArticle[index]),
             //     childCount:pubmedId.pubmedArticleSet.pubmedArticle.length,
             //   ),
             // ),
@@ -198,7 +200,7 @@ class PubMedScreenState extends State<PubMedScreen> {
               child: Column(
                 children: <Widget>[
                   new CircularProgressIndicator(),
-                  new Text("dasdsd"),
+                  new Text("Querying...."),
                 ],
               ),
             )),
