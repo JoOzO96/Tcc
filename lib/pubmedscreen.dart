@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:unidb/Classes/chembl/chembl.dart';
 import 'package:unidb/Classes/chembl/chemblmolecule.dart';
 import 'package:unidb/Classes/pubmed/pubmed.dart';
+import 'package:unidb/Classes/pubmed/pubmedid.dart';
 import 'package:unidb/chembl.dart';
 import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -23,6 +24,9 @@ class PubMedScreenState extends State<PubMedScreen> {
   DateTime dataFim = new DateTime.now();
   DateTime dataInicio = DateTime(1990, 1, 1);
   Xml2Json xml2json = new Xml2Json();
+  List<PubMedId> listPubmedid = new List();
+  PubMedId pubmedId = new PubMedId();
+  String request = "";
   @override
   void initState() {
     super.initState();
@@ -51,15 +55,32 @@ class PubMedScreenState extends State<PubMedScreen> {
     eutilspubmed = Etuilspubmed.fromJson(userMap);
 
     for (int i = 0; eutilspubmed.esearchresult.idlist.length > i; i++) {
-      response = await http.get(
-          "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=" +
-              eutilspubmed.esearchresult.idlist.elementAt(i) +
-              "&format=xml");
-      xml2json.parse(response.body);
-      String teste = xml2json.toBadgerfish();
-      print("oi");
+      request = request + eutilspubmed.esearchresult.idlist.elementAt(i) + ",";
     }
 
+    response = await http.get(
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=" +
+            // eutilspubmed.esearchresult.idlist.elementAt(i) +
+            request.substring(0, request.length - 1) +
+            "&rettype=xml");
+    String teste = response.body;
+    print(teste);
+
+    // teste = teste.toString().replaceAll(String.fromCharCode(34), "");
+    // teste = teste.replaceAll("<?xml version=1.0 ?>", "");
+    // teste = teste.replaceAll("<!DOCTYPE PubmedArticleSet PUBLIC -//NLM//DTD PubMedArticle, 1st January 2019//EN https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_190101.dtd>", "");
+    teste = teste.replaceAll("\\", "");
+
+    xml2json.parse(teste);
+    print(
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=" +
+            // eutilspubmed.esearchresult.idlist.elementAt(i) +
+            request.substring(0, request.length - 1) +
+            "&rettype=xml");
+    request = "";
+    teste = xml2json.toBadgerfish();
+    userMap = json.decode(teste);
+    pubmedId = PubMedId.fromJson(userMap);
     setState(() {
       consultaconcluida = true;
     });
@@ -155,14 +176,14 @@ class PubMedScreenState extends State<PubMedScreen> {
               ),
             ),
             // SliverGrid(
-            //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //               crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
-            //           delegate: new SliverChildBuilderDelegate(
-            //             (context, index) =>
-            //                 new PubmedCard(eutilspubmed.esearchresult.idlist[index]),
-            //             childCount: eutilspubmed.esearchresult.idlist.length,
-            //           ),
-            //         ),
+            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+            //   delegate: new SliverChildBuilderDelegate(
+            //     (context, index) =>
+            //         new PubmedCard(pubmedId.pubmedArticleSet.pubmedArticle[index]),
+            //     childCount:pubmedId.pubmedArticleSet.pubmedArticle.length,
+            //   ),
+            // ),
           ]),
         )),
       );
