@@ -436,13 +436,13 @@
 
 //   ISSN.fromJson(Map<String, dynamic> json) {
 //     sIssnType = json['_IssnType'];
-//     sText = json['__text'];
+//     sText = json[String.fromCharCode(36) + 't'];
 //   }
 
 //   Map<String, dynamic> toJson() {
 //     final Map<String, dynamic> data = new Map<String, dynamic>();
 //     data['_IssnType'] = this.sIssnType;
-//     data['__text'] = this.sText;
+//     data[String.fromCharCode(36) + 't'] = this.sText;
 //     return data;
 //   }
 // }
@@ -924,7 +924,7 @@ class MedlineCitation {
     pMID = json['PMID'] != null ? new PMID.fromJson(json['PMID']) : null;
     dateRevised = json['DateRevised'] != null
         ? new DateRevised.fromJson(json['DateRevised'])
-        : null;
+        : new DateRevised();
     article =
         json['Article'] != null ? new Article.fromJson(json['Article']) : null;
     medlineJournalInfo = json['MedlineJournalInfo'] != null
@@ -1017,7 +1017,7 @@ class IndexingMethod {
   IndexingMethod({this.t});
 
   IndexingMethod.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1033,7 +1033,7 @@ class CoiStatement {
   CoiStatement({this.t});
 
   CoiStatement.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1049,7 +1049,7 @@ class Owner {
   Owner({this.t});
 
   Owner.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1065,7 +1065,7 @@ class Status {
   Status({this.t});
 
   Status.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1081,7 +1081,7 @@ class CitationSubset {
   CitationSubset({this.t});
 
   CitationSubset.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1121,13 +1121,13 @@ class PMID {
 
   PMID.fromJson(Map<String, dynamic> json) {
     sVersion = json['_Version'];
-    sText = json['__text'];
+    sText = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_Version'] = this.sVersion;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }
@@ -1140,7 +1140,7 @@ class DateRevised {
   DateRevised({this.year, this.month, this.day});
 
   DateRevised.fromJson(Map<String, dynamic> json) {
-    year = json['Year'] != null ? new Year.fromJson(json['Year']) : null;
+    year = json['Year'] != null ? new Year.fromJson(json['Year']) : new Year();
     month = json['Month'] != null ? new Month.fromJson(json['Month']) : null;
     day = json['Day'] != null ? new Day.fromJson(json['Day']) : null;
   }
@@ -1160,7 +1160,7 @@ class Year {
   Year({this.t});
 
   Year.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'] != null ? json[String.fromCharCode(36) + 't'] : "No date" ;
   }
 
   Map<String, dynamic> toJson() {
@@ -1176,7 +1176,7 @@ class Title1 {
   Title1({this.t});
 
   Title1.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1192,7 +1192,7 @@ class Language {
   Language({this.t});
 
   Language.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1208,7 +1208,7 @@ class AbstractText {
   AbstractText({this.t});
 
   AbstractText.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1224,7 +1224,7 @@ class CopyrightInformation {
   CopyrightInformation({this.t});
 
   CopyrightInformation.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1240,7 +1240,7 @@ class LastName {
   LastName({this.t});
 
   LastName.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1256,7 +1256,7 @@ class ISOAbbreviation {
   ISOAbbreviation({this.t});
 
   ISOAbbreviation.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1272,7 +1272,7 @@ class Month {
   Month({this.t});
 
   Month.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1288,7 +1288,7 @@ class Day {
   Day({this.t});
 
   Day.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1412,7 +1412,7 @@ class VernacularTitle {
   VernacularTitle({this.t});
 
   VernacularTitle.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1463,13 +1463,13 @@ class ISSN {
 
   ISSN.fromJson(Map<String, dynamic> json) {
     sIssnType = json['_IssnType'];
-    sText = json['__text'];
+    sText = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_IssnType'] = this.sIssnType;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }
@@ -1512,7 +1512,7 @@ class Issue {
   Issue({this.t});
 
   Issue.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1528,7 +1528,7 @@ class Volume {
   Volume({this.t});
 
   Volume.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1544,7 +1544,7 @@ class SCitedMedium {
   SCitedMedium({this.t});
 
   SCitedMedium.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1587,7 +1587,7 @@ class ELocationID {
     if (json != null) {
       sEIdType = json['_EIdType'] != null ? json['_EIdType'] : null;
       sValidYN = json['_ValidYN'] != null ? json['_ValidYN'] : null;
-      sText = json['__text'] != null ? json['__text'] : null;
+      sText = json[String.fromCharCode(36) + 't'] != null ? json[String.fromCharCode(36) + 't'] : null;
     }
   }
 
@@ -1595,7 +1595,7 @@ class ELocationID {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_EIdType'] = this.sEIdType;
     data['_ValidYN'] = this.sValidYN;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }
@@ -1692,11 +1692,9 @@ class Author {
 
     try {
       if (json['AffiliationInfo'] != null) {
-        print(json['AffiliationInfo'].toString());
         if (json['AffiliationInfo'].toString().startsWith("[")) {
           affiliationInfo = json['AffiliationInfo'] != null
               ? json['AffiliationInfo'].forEach((v) {
-                  print(v.toString());
                   affiliationInfo.add(new AffiliationInfo.fromJson(v));
                 })
               : null;
@@ -1733,7 +1731,7 @@ class ForeName {
   ForeName({this.t});
 
   ForeName.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1749,7 +1747,7 @@ class Initials {
   Initials({this.t});
 
   Initials.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1767,13 +1765,13 @@ class Identifier {
 
   Identifier.fromJson(Map<String, dynamic> json) {
     sSource = json['_Source'];
-    sText = json['__text'];
+    sText = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_Source'] = this.sSource;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }
@@ -1809,7 +1807,7 @@ class Affiliation {
   Affiliation({this.t});
 
   Affiliation.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1856,13 +1854,13 @@ class PublicationType {
 
   PublicationType.fromJson(Map<String, dynamic> json) {
     sUI = json['_UI'] != null ? json['_UI'] : null;
-    sText = json['__text'] != null ? json['__text'] : null;
+    sText = json[String.fromCharCode(36) + 't'] != null ? json[String.fromCharCode(36) + 't'] : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_UI'] = this.sUI;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }
@@ -1916,7 +1914,7 @@ class MedlinePgn {
   MedlinePgn({this.t});
 
   MedlinePgn.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1980,7 +1978,7 @@ class DataBankName {
   DataBankName({this.t});
 
   DataBankName.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2014,7 +2012,7 @@ class AccessionNumber {
   AccessionNumber({this.t});
 
   AccessionNumber.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2078,7 +2076,7 @@ class Acronym {
   Acronym({this.t});
 
   Acronym.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2094,7 +2092,7 @@ class Agency {
   Agency({this.t});
 
   Agency.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2110,7 +2108,7 @@ class GrantID {
   GrantID({this.t});
 
   GrantID.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2159,7 +2157,7 @@ class ISSNLinking {
   ISSNLinking({this.t});
 
   ISSNLinking.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2175,7 +2173,7 @@ class NlmUniqueID {
   NlmUniqueID({this.t});
 
   NlmUniqueID.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2191,7 +2189,7 @@ class MedlineTA {
   MedlineTA({this.t});
 
   MedlineTA.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2207,7 +2205,7 @@ class Country {
   Country({this.t});
 
   Country.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2251,13 +2249,13 @@ class Keyword {
 
   Keyword.fromJson(Map<String, dynamic> json) {
     sMajorTopicYN = json['_MajorTopicYN'];
-    sText = json['__text'];
+    sText = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_MajorTopicYN'] = this.sMajorTopicYN;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }
@@ -2270,9 +2268,13 @@ class ChemicalList {
   ChemicalList.fromJson(Map<String, dynamic> json) {
     if (json['Chemical'] != null) {
       chemical = new List<Chemical>();
-      json['Chemical'].forEach((v) {
-        chemical.add(new Chemical.fromJson(v));
-      });
+      if (json['Chemical'].toString().startsWith("[")) {
+        json['Chemical'].forEach((v) {
+          chemical.add(new Chemical.fromJson(v));
+        });
+      } else {
+        chemical.add(new Chemical.fromJson(json['Chemical']));
+      }
     }
   }
 
@@ -2316,7 +2318,7 @@ class RegistryNumber {
   RegistryNumber({this.t});
 
   RegistryNumber.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2334,13 +2336,13 @@ class NameOfSubstance {
 
   NameOfSubstance.fromJson(Map<String, dynamic> json) {
     sUI = json['_UI'];
-    sText = json['__text'];
+    sText = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_UI'] = this.sUI;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }
@@ -2411,7 +2413,7 @@ class DescriptorName {
   DescriptorName.fromJson(Map<String, dynamic> json) {
     sUI = json['_UI'];
     sMajorTopicYN = json['_MajorTopicYN'];
-    sText = json['__text'];
+    sText = json[String.fromCharCode(36) + 't'];
     sType = json['_Type'];
   }
 
@@ -2419,7 +2421,7 @@ class DescriptorName {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_UI'] = this.sUI;
     data['_MajorTopicYN'] = this.sMajorTopicYN;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     data['_Type'] = this.sType;
     return data;
   }
@@ -2437,7 +2439,7 @@ class QualifierName {
       sUI = json['_UI'] != null ? json['_UI'] : null;
       sMajorTopicYN =
           json['_MajorTopicYN'] != null ? json['_MajorTopicYN'] : null;
-      sText = json['__text'] != null ? json['__text'] : null;
+      sText = json[String.fromCharCode(36) + 't'] != null ? json[String.fromCharCode(36) + 't'] : null;
     } else {
       sUI = null;
       sMajorTopicYN = null;
@@ -2449,22 +2451,28 @@ class QualifierName {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_UI'] = this.sUI;
     data['_MajorTopicYN'] = this.sMajorTopicYN;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }
 
 class OtherAbstract {
-  AbstractText abstractText;
+  List<AbstractText> abstractText;
   Type1 sType;
   Language sLanguage;
 
   OtherAbstract({this.abstractText, this.sType, this.sLanguage});
 
   OtherAbstract.fromJson(Map<String, dynamic> json) {
-    abstractText = json['AbstractText'] != null
-        ? new AbstractText.fromJson(json['AbstractText'])
-        : null;
+    abstractText = new List();
+    if (json['AbstractText'].toString().startsWith("[")){
+      json['AbstractText'].forEach((v) {
+        abstractText.add(new AbstractText.fromJson(v));
+      });
+    }else{
+      abstractText.add(new AbstractText.fromJson(json['AbstractText']));
+    }
+    
     sType = json['_Type'] != null ? new Type1.fromJson(json['_Type']) : null;
     sLanguage = json['_Language'] != null
         ? new Language.fromJson(json['_Language'])
@@ -2486,7 +2494,7 @@ class Type1 {
   Type1({this.t});
 
   Type1.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2557,7 +2565,7 @@ class RefSource {
   RefSource({this.t});
 
   RefSource.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2604,7 +2612,7 @@ class PublicationStatus {
   PublicationStatus({this.t});
 
   PublicationStatus.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2682,7 +2690,7 @@ class Hour {
   Hour({this.t});
 
   Hour.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2698,7 +2706,7 @@ class Minute {
   Minute({this.t});
 
   Minute.fromJson(Map<String, dynamic> json) {
-    t = json['$t'];
+    t = json[String.fromCharCode(36) + 't'];
   }
 
   Map<String, dynamic> toJson() {
@@ -2742,14 +2750,14 @@ class ArticleId {
   ArticleId({this.sIdType, this.sText});
 
   ArticleId.fromJson(Map<String, dynamic> json) {
-    sIdType = json['_IdType'] != null ? json['_IdType'] : null;
-    sText = json['__text'] != null ? json['__text'] : null;
+    sIdType = json['IdType'] != null ? json['IdType'] : null;
+    sText = json[String.fromCharCode(36) + 't'] != null ? json[String.fromCharCode(36) + 't'] : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_IdType'] = this.sIdType;
-    data['__text'] = this.sText;
+    data[String.fromCharCode(36) + 't'] = this.sText;
     return data;
   }
 }

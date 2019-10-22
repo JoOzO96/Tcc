@@ -69,7 +69,7 @@ class _ChemblCardState extends State<ChemblCard> {
         }
       }
     } else {
-      listaNomes = "Sem sinonimos";
+      listaNomes = "No synonyms";
     }
 
     if (widget._chemblMolecule.moleculeProperties != null) {

@@ -37,7 +37,7 @@ class _DisgenetCardState extends State<DisgenetCard> {
           new Container(height: 2.0),
           new Text("UNIPROT: " + widget.disgenet.uniprotid,
               style: subHeaderTextStyle),
-          new Text("Simbolo: " + widget.disgenet.geneSymbol,
+          new Text("Symbol: " + widget.disgenet.geneSymbol,
               style: subHeaderTextStyle),
           new Text("Score: " + widget.disgenet.score.toString(),
               style: subHeaderTextStyle),

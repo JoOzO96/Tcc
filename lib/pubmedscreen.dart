@@ -130,7 +130,7 @@ class PubMedScreenState extends State<PubMedScreen> {
                           }, currentTime: dataInicio, locale: LocaleType.pt);
                         },
                         child: Text(
-                          "Data Inicio: " +
+                          "Starting at: " +
                               dataInicio.day.toString() +
                               "/" +
                               dataInicio.month.toString() +
@@ -164,7 +164,7 @@ class PubMedScreenState extends State<PubMedScreen> {
                           }, currentTime: dataFim, locale: LocaleType.pt);
                         },
                         child: Text(
-                          "Data Fim: " +
+                          "Finalizing at: " +
                               dataFim.day.toString() +
                               "/" +
                               dataFim.month.toString() +
@@ -177,15 +177,15 @@ class PubMedScreenState extends State<PubMedScreen> {
                 childCount: 2,
               ),
             ),
-            // SliverGrid(
-            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //       crossAxisCount: 1, childAspectRatio: 2, mainAxisSpacing: 6),
-            //   delegate: new SliverChildBuilderDelegate(
-            //     (context, index) =>
-            //       new PubMedCard(pubmedId.pubmedArticleSet.pubmedArticle[index]),
-            //     childCount:pubmedId.pubmedArticleSet.pubmedArticle.length,
-            //   ),
-            // ),
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1, childAspectRatio: 2, mainAxisSpacing: 6),
+              delegate: new SliverChildBuilderDelegate(
+                (context, index) =>
+                  new PubMedCard(pubmedId.pubmedArticleSet.pubmedArticle[index]),
+                childCount:pubmedId.pubmedArticleSet.pubmedArticle.length,
+              ),
+            ),
           ]),
         )),
       );

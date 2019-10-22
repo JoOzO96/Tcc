@@ -59,10 +59,10 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
         chembl = ChemblIdLookup.fromJson(mapChembl);
         setState(() {
           mensagem = "CHEMBL: " +
-              i.toString() +
-              " de " +
+              (i + 1).toString() +
+              " of " +
               bioactivities.length.toString() +
-              " interações.";
+              " interactions.";
         });
         listaCheml.add(chembl);
         listaCheml = listaCheml.where((p) => p.resourceUrl.isNotEmpty).toList();
@@ -77,10 +77,10 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
         chemblMolecule = Quimicos.fromJson(mapDados);
         setState(() {
           mensagem = "CHEMBL: " +
-              i.toString() +
-              " de " +
+              (i + 1).toString() +
+              " of " +
               listaCheml.length.toString() +
-              " drogas consultadas.";
+              " drugs.";
         });
         listaMoleculas.add(chemblMolecule);
       }
@@ -118,7 +118,7 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
             child: new Container(
           margin: new EdgeInsets.all(30),
           child: new Center(
-            child: new Text("Sem informacoes de moleculas"),
+            child: new Text("No molecule information."),
           ),
         )),
       );
@@ -155,7 +155,7 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
               child: Column(
                 children: <Widget>[
                   new CircularProgressIndicator(),
-                  new Text("Realizando consulta nos bancos de dados..."),
+                  new Text("Querying the Databases..."),
                   new Text(mensagem),
                 ],
               ),

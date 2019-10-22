@@ -172,7 +172,7 @@ class HomeScreenState extends State<HomeScreen> {
       centerTitle: true,
       title: new TextField(
         controller: _filter,
-        decoration: new InputDecoration(hintText: 'Digite a busca...'),
+        decoration: new InputDecoration(hintText: 'Enter search...'),
       ),
       leading: new IconButton(
         icon: new Icon(Icons.search),
@@ -195,7 +195,7 @@ class HomeScreenState extends State<HomeScreen> {
                 new Row(
                   children: <Widget>[
                     new Icon(Icons.error),
-                    new Text("Erro ao consultar dados...."),
+                    new Text("Error querying data...."),
                   ],
                 )
               ],
@@ -240,7 +240,7 @@ class HomeScreenState extends State<HomeScreen> {
               child: new Column(
             children: <Widget>[
               new CircularProgressIndicator(),
-              new Text("Realizando consulta nos bancos de dados..."),
+              new Text("Querying the Databases..."),
             ],
           )));
     } else {

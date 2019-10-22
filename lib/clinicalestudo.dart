@@ -262,7 +262,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
         
       }
     } else {
-      condicaoParticipantes = "Não informado.";
+      condicaoParticipantes = "Uninformed.";
       setState(() {
           naoPossuiLista = true;
          });
@@ -271,19 +271,19 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
     if (widget.study.protocolSection.eligibilityModule != null) {
       if (widget.study.protocolSection.eligibilityModule.healthyVolunteers !=
           null) {
-        criteriosSelecao += "\nVoluntários: " +
+        criteriosSelecao += "\nVolunteers: " +
             widget.study.protocolSection.eligibilityModule.healthyVolunteers;
       }
       if (widget.study.protocolSection.eligibilityModule.gender != null) {
         criteriosSelecao +=
-            "\nSexo: " + widget.study.protocolSection.eligibilityModule.gender;
+            "\nGender: " + widget.study.protocolSection.eligibilityModule.gender;
       }
       if (widget.study.protocolSection.eligibilityModule.minimumAge != null) {
-        criteriosSelecao += "\nIdade minima: " +
+        criteriosSelecao += "\nMinimum Age: " +
             widget.study.protocolSection.eligibilityModule.minimumAge;
       }
       if (widget.study.protocolSection.eligibilityModule.maximumAge != null) {
-        criteriosSelecao += "\nIdade máxima: " +
+        criteriosSelecao += "\nMaximum Age: " +
             widget.study.protocolSection.eligibilityModule.maximumAge;
       }
       if (widget.study.protocolSection.eligibilityModule.stdAgeList.stdAge !=
@@ -306,7 +306,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             widget.study.protocolSection.eligibilityModule.eligibilityCriteria;
       }
     } else {
-      criteriosSelecao = "\nNão informado.";
+      criteriosSelecao = "\nUninformed.";
     }
   }
 
@@ -772,11 +772,11 @@ class TextoWidget extends StatelessWidget {
       return new Column(
         children: <Widget>[
           new Text(
-              "Título: " +
+              "Title: " +
                   study.protocolSection.identificationModule.officialTitle,
               style: subHeaderTextStyle),
           new Text(" "),
-          new Text("Realizado por: " + nomeParticipantes,
+          new Text("Performed by: " + nomeParticipantes,
               style: subHeaderTextStyle),
           new Text(" "),
           new Text(
@@ -784,27 +784,27 @@ class TextoWidget extends StatelessWidget {
                   study.protocolSection.descriptionModule.briefSummary,
               style: subHeaderTextStyle),
           new Text(" "),
-          new Text("Classificação para o estudo: " + condicaoParticipantes,
+          new Text("Classification for the study: " + condicaoParticipantes,
               style: subHeaderTextStyle),
           new Text(" "),
-          new Text("Critérios de seleção: " + criteriosSelecao,
+          new Text("Selection Criteria: " + criteriosSelecao,
               style: subHeaderTextStyle),
           new Text(" "),
           new Text("DISGENET: ", style: subHeaderTextStyle),
           new Text(" "),
           new CircularProgressIndicator(),
-          new Text("Aguardando dados do DISGENET"),
+          new Text("Waiting data from DISGENET"),
         ],
       );
     } else {
       return new Column(
         children: <Widget>[
           new Text(
-              "Título: " +
+              "Title: " +
                   study.protocolSection.identificationModule.officialTitle,
               style: subHeaderTextStyle),
           new Text(" "),
-          new Text("Realizado por: " + nomeParticipantes,
+          new Text("Performed by: " + nomeParticipantes,
               style: subHeaderTextStyle),
           new Text(" "),
           new Text(
@@ -812,10 +812,10 @@ class TextoWidget extends StatelessWidget {
                   study.protocolSection.descriptionModule.briefSummary,
               style: subHeaderTextStyle),
           new Text(" "),
-          new Text("Classificação para o estudo: " + condicaoParticipantes,
+          new Text("Classification for the study: " + condicaoParticipantes,
               style: subHeaderTextStyle),
           new Text(" "),
-          new Text("Critérios de seleção: " + criteriosSelecao,
+          new Text("Selection Criteria: " + criteriosSelecao,
               style: subHeaderTextStyle),
           new Text(" "),
           new Text("DISGENET: ", style: subHeaderTextStyle),
