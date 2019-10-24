@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:unidb/Classes/ClinicalTrials/FullStudies.dart';
 import 'package:unidb/Classes/ClinicalTrials/Study.dart';
-import 'package:unidb/clinicalestudo.dart';
 
 class StudyCard extends StatefulWidget {
   final FullStudies study;

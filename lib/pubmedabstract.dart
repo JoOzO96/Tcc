@@ -1,16 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:unidb/Classes/chembl/chembl.dart';
-import 'package:unidb/Classes/chembl/chemblmolecule.dart';
-import 'package:unidb/Classes/pubmed/pubmed.dart';
-import 'package:unidb/Classes/pubmed/pubmedid.dart';
-import 'package:unidb/chembl.dart';
-import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:unidb/pubmedcard.dart';
-import 'package:xml2json/xml2json.dart';
 
 class PubMedAbstractScreen extends StatefulWidget {
   final String id;

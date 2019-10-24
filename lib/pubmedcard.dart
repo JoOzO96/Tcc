@@ -39,7 +39,7 @@ class _PubMedCardState extends State<PubMedCard> {
             children: <Widget>[]));
     var planetCardContent2 = new Flexible(
         child: new Container(
-      margin: new EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
+      margin: new EdgeInsets.fromLTRB(16, 16.0, 10.0, 16.0),
       constraints: new BoxConstraints.expand(),
       child: new Column(
         children: <Widget>[

@@ -31,6 +31,7 @@ dependencies:
   flutter_range_slider: ^1.4.0
   flutter_datetime_picker: ^1.2.6
   asn1lib: ^0.5.9
+  toast: ^0.1.5
 
 dev_dependencies:
   flutter_test:

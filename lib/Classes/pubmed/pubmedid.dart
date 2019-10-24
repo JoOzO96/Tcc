@@ -811,9 +811,7 @@
 //   }
 // }
 
-import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 
 class PubMedId {
   PubmedArticleSet pubmedArticleSet;
@@ -2224,9 +2222,13 @@ class KeywordList {
   KeywordList.fromJson(Map<String, dynamic> json) {
     if (json['Keyword'] != null) {
       keyword = new List<Keyword>();
-      json['Keyword'].forEach((v) {
-        keyword.add(new Keyword.fromJson(v));
-      });
+      if (json['Keyword'].toString().startsWith("[")) {
+        json['Keyword'].forEach((v) {
+          keyword.add(new Keyword.fromJson(v));
+        });
+      } else {
+        keyword.add(new Keyword.fromJson(json['Keyword']));
+      }
     }
     sOwner = json['_Owner'];
   }

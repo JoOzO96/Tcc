@@ -1,7 +1,9 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
+import 'package:http/http.dart' as http;
 import 'package:unidb/Classes/chembl/chemblmolecule.dart';
 import 'package:unidb/Classes/pubmed/pubmed.dart';
 
@@ -29,10 +31,19 @@ class _ChemblCardState extends State<ChemblCard> {
 
   testeconsulta() async {
     try {
-      var response = await http.get(
-          "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" +
-              widget._chemblMolecule.prefName +
-              "&retmax=100&usehistory=y&format=json");
+      var response;
+      if (widget._chemblMolecule.prefName == "No name") {
+        response = await http.get(
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" +
+                widget._chemblMolecule.moleculeHierarchy.moleculeChemblId +
+                "&retmax=100&usehistory=y&format=json");
+      } else {
+        response = await http.get(
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" +
+                widget._chemblMolecule.prefName +
+                "&retmax=100&usehistory=y&format=json");
+      }
+
       print(
           "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" +
               widget._chemblMolecule.prefName +
@@ -40,7 +51,7 @@ class _ChemblCardState extends State<ChemblCard> {
       Map userMap = json.decode(response.body);
       eutilspubmed = Etuilspubmed.fromJson(userMap);
       trabalhosPubmed = eutilspubmed.esearchresult.retmax;
-      if ( eutilspubmed.esearchresult.retmax == "100"){
+      if (eutilspubmed.esearchresult.retmax == "100") {
         trabalhosPubmed = "> 100";
       }
       setState(() {});
@@ -58,12 +69,17 @@ class _ChemblCardState extends State<ChemblCard> {
           if (!lista.contains(widget._chemblMolecule.moleculeSynonyms
               .elementAt(i)
               .moleculeSynonym)) {
-            listaNomes = listaNomes + "" +  widget._chemblMolecule.moleculeSynonyms.elementAt(i).moleculeSynonym +     "\n";
+            listaNomes = listaNomes +
+                "" +
+                widget._chemblMolecule.moleculeSynonyms
+                    .elementAt(i)
+                    .moleculeSynonym +
+                "\n";
             lista.add(widget._chemblMolecule.moleculeSynonyms
                 .elementAt(i)
                 .moleculeSynonym);
           }
-          if (lista.length >= 5) {
+          if (lista.length >= 4) {
             break;
           }
         }
@@ -132,18 +148,23 @@ class _ChemblCardState extends State<ChemblCard> {
     );
 
     return new GestureDetector(
-      child: Center(
-          child: Container(
-              margin: const EdgeInsets.symmetric(
-                vertical: 16.0,
-                horizontal: 16.0,
-              ),
-              child: planetCard)),
-      onTap: () => criatela(widget._chemblMolecule.prefName)
-    );
+        child: Center(
+            child: Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 16.0,
+                ),
+                child: planetCard)),
+        onTap: () =>
+            criatela(widget._chemblMolecule.prefName == "No name" ? widget._chemblMolecule.moleculeHierarchy.moleculeChemblId :  widget._chemblMolecule.prefName, trabalhosPubmed));
   }
 
-  criatela(String prefName) {
-    Navigator.pushNamed(context, "/pubmedscreen", arguments: prefName);
+  criatela(String prefName, String trabalhosPubmed) {
+    var numero = num.parse(trabalhosPubmed);
+    if (numero > 0) {
+      Navigator.pushNamed(context, "/pubmedscreen", arguments: prefName);
+    } else {
+      Toast.show("Don't have references in PubMed to " + prefName , context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+    }
   }
 }

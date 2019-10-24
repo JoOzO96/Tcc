@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
+import 'package:http/http.dart' as http;
 import 'package:unidb/Classes/ClinicalTrials/Study.dart';
 import 'package:unidb/Classes/disgenet/Disgenet.dart';
 import 'package:unidb/Classes/umls/umls.dart';
 import 'package:unidb/drugtarget.dart';
+
 import 'Classes/ClinicalTrials/Collaborator.dart';
-import 'package:http/http.dart' as http;
 
 class ClinicalEstudoScreen extends StatefulWidget {
   final Study study;
@@ -23,7 +24,12 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
   String criteriosSelecao = "";
   String dadosDisgenet = "";
   bool montarTela = true;
-  bool naoPossuiLista = false;
+  bool naoPossuiLista = true;
+  bool naoPossuiLista1 = false;
+  bool naoPossuiLista2 = false;
+  bool naoPossuiLista3 = false;
+  bool naoPossuiLista4 = false;
+  bool naoPossuiLista5 = false;
   List<Disgenet> disgenet0 = new List();
   Future<List<Disgenet>> disgenet1;
   Future<List<Disgenet>> disgenet2;
@@ -99,7 +105,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
           "?format=json");
       resposta = "";
       resposta = response.body;
-      
+
       if (resposta.toString().contains("errors")) {
         disgenet0 = new List();
       } else {
@@ -111,7 +117,7 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
     setState(() {
       controle0 = true;
     });
-    
+
     if (disgenet0.length > 50) {
       return disgenet0.sublist(0, 50);
     } else {
@@ -146,6 +152,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
       listCondicaoParticipantes = widget
           .study.protocolSection.conditionsModule.conditionList.condition
           .toList();
+      setState(() {
+        naoPossuiLista = false;
+      });
       for (int i = 0; i < listCondicaoParticipantes.length; i++) {
         if ((i + 2) == listCondicaoParticipantes.length) {
           condicaoParticipantes +=
@@ -172,7 +181,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             }
             disgenet1Final = resultList;
             controle1Final = true;
-            
+            if (disgenet1Final.length == 0) {
+              naoPossuiLista1 = true;
+            }
           });
         });
         if (listCondicaoParticipantes.length > 1) {
@@ -192,6 +203,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
               }
               disgenet2Final = resultList;
               controle2Final = true;
+              if (disgenet2Final.length == 0) {
+                naoPossuiLista2 = true;
+              }
             });
           });
         }
@@ -212,6 +226,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
               }
               disgenet3Final = resultList;
               controle3Final = true;
+              if (disgenet3Final.length == 0) {
+                naoPossuiLista4 = true;
+              }
             });
           });
         }
@@ -232,6 +249,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
               }
               disgenet4Final = resultList;
               controle4Final = true;
+              if (disgenet4Final.length == 0) {
+                naoPossuiLista4 = true;
+              }
             });
           });
         }
@@ -252,20 +272,23 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
               }
               disgenet5Final = resultList;
               controle5Final = true;
+              if (disgenet5Final.length == 0) {
+                naoPossuiLista5 = true;
+              }
             });
           });
         }
-      }else{
-        setState(() {
-          naoPossuiLista = true;
-         });
-        
       }
     } else {
       condicaoParticipantes = "Uninformed.";
       setState(() {
-          naoPossuiLista = true;
-         });
+        consultaDisgenet = true;
+        naoPossuiLista1 = true;
+        naoPossuiLista2 = true;
+        naoPossuiLista3 = true;
+        naoPossuiLista4 = true;
+        naoPossuiLista5 = true;
+      });
     }
 
     if (widget.study.protocolSection.eligibilityModule != null) {
@@ -275,8 +298,8 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             widget.study.protocolSection.eligibilityModule.healthyVolunteers;
       }
       if (widget.study.protocolSection.eligibilityModule.gender != null) {
-        criteriosSelecao +=
-            "\nGender: " + widget.study.protocolSection.eligibilityModule.gender;
+        criteriosSelecao += "\nGender: " +
+            widget.study.protocolSection.eligibilityModule.gender;
       }
       if (widget.study.protocolSection.eligibilityModule.minimumAge != null) {
         criteriosSelecao += "\nMinimum Age: " +
@@ -312,14 +335,26 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (naoPossuiLista1 &&
+        naoPossuiLista2 &&
+        naoPossuiLista3 &&
+        naoPossuiLista4 &&
+        naoPossuiLista5 &&
+        consultaDisgenet) {
+      naoPossuiLista = true;
+    } else {
+      naoPossuiLista = false;
+    }
+
     final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
     final regularTextStyle = baseTextStyle.copyWith(
         color: Colors.black87, fontSize: 9.0, fontWeight: FontWeight.w400);
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 20.0);
-    if (consultaDisgenet == false) {
+    if (consultaDisgenet == false && naoPossuiLista == true) {
       return new Scaffold(
-          floatingActionButton:
-              new FloatingActionButton(child: Icon(Icons.arrow_back_ios), onPressed: () => Navigator.pop(context)),
+          floatingActionButton: new FloatingActionButton(
+              child: Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context)),
           body: new SafeArea(
             child: Container(
               child: CustomScrollView(
@@ -342,6 +377,62 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
             ),
           ));
     } else {
+      if (consultaDisgenet == true && naoPossuiLista == true) {
+        return new Scaffold(
+            floatingActionButton: new FloatingActionButton(
+                child: Icon(Icons.arrow_back_ios),
+                onPressed: () => Navigator.pop(context)),
+            body: new SafeArea(
+              child: Container(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          TextoWidget(
+                              widget.study,
+                              nomeParticipantes,
+                              condicaoParticipantes,
+                              criteriosSelecao,
+                              consultaDisgenet,
+                              naoPossuiLista),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+      }
+
+      if (consultaDisgenet == false && naoPossuiLista == false) {
+        return new Scaffold(
+            floatingActionButton: new FloatingActionButton(
+                child: Icon(Icons.arrow_back_ios),
+                onPressed: () => Navigator.pop(context)),
+            body: new SafeArea(
+              child: Container(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          TextoWidget(
+                              widget.study,
+                              nomeParticipantes,
+                              condicaoParticipantes,
+                              criteriosSelecao,
+                              consultaDisgenet,
+                              naoPossuiLista),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+      }
+
       if (controle1Final == true &&
           controle2Final == false &&
           controle3Final == false &&
@@ -366,7 +457,8 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet,naoPossuiLista),
+                              consultaDisgenet,
+                              naoPossuiLista),
                         ],
                       ),
                     ),
@@ -379,7 +471,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -416,7 +510,8 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet,naoPossuiLista),
+                              consultaDisgenet,
+                              naoPossuiLista),
                         ],
                       ),
                     ),
@@ -429,7 +524,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -445,7 +542,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet2Final[index]),
@@ -482,7 +581,8 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet,naoPossuiLista),
+                              consultaDisgenet,
+                              naoPossuiLista),
                         ],
                       ),
                     ),
@@ -495,7 +595,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -511,7 +613,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet2Final[index]),
@@ -527,7 +631,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet3Final[index]),
@@ -564,7 +670,8 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet,naoPossuiLista),
+                              consultaDisgenet,
+                              naoPossuiLista),
                         ],
                       ),
                     ),
@@ -577,7 +684,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -593,7 +702,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet2Final[index]),
@@ -609,7 +720,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet3Final[index]),
@@ -625,7 +738,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet4Final[index]),
@@ -661,7 +776,8 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                               nomeParticipantes,
                               condicaoParticipantes,
                               criteriosSelecao,
-                              consultaDisgenet,naoPossuiLista),
+                              consultaDisgenet,
+                              naoPossuiLista),
                         ],
                       ),
                     ),
@@ -674,7 +790,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet1Final[index]),
@@ -690,7 +808,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet2Final[index]),
@@ -706,7 +826,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet3Final[index]),
@@ -722,7 +844,9 @@ class ClinicalEstudoScreenState extends State<ClinicalEstudoScreen> {
                     ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2, mainAxisSpacing: 6),
+                          crossAxisCount: 2,
+                          childAspectRatio: 2,
+                          mainAxisSpacing: 6),
                       delegate: new SliverChildBuilderDelegate(
                         (context, index) =>
                             new DisgenetCard(disgenet5Final[index]),
@@ -768,7 +892,7 @@ class TextoWidget extends StatelessWidget {
     final regularTextStyle = baseTextStyle.copyWith(
         color: Colors.black87, fontSize: 9.0, fontWeight: FontWeight.w400);
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 20.0);
-    if (consultaDisgenet == false && naoPossuiLista == false) {
+    if (consultaDisgenet == false) {
       return new Column(
         children: <Widget>[
           new Text(
@@ -797,6 +921,37 @@ class TextoWidget extends StatelessWidget {
         ],
       );
     } else {
+      if (naoPossuiLista == true) {
+        return new Column(
+          children: <Widget>[
+            new Text(
+                "Title: " +
+                    study.protocolSection.identificationModule.officialTitle,
+                style: subHeaderTextStyle),
+            new Text(" "),
+            new Text("Performed by: " + nomeParticipantes,
+                style: subHeaderTextStyle),
+            new Text(" "),
+            new Text(
+                "Briefing: " +
+                    study.protocolSection.descriptionModule.briefSummary,
+                style: subHeaderTextStyle),
+            new Text(" "),
+            new Text("Classification for the study: " + condicaoParticipantes,
+                style: subHeaderTextStyle),
+            new Text(" "),
+            new Text("Selection Criteria: " + criteriosSelecao,
+                style: subHeaderTextStyle),
+            new Text(" "),
+            new Text("DISGENET: ", style: subHeaderTextStyle),
+            new Text(" "),
+            new Text("No data from DISGENET"),
+            new Text(" "),
+            new Text(" "),
+            new Text(" "),
+          ],
+        );
+      }
       return new Column(
         children: <Widget>[
           new Text(
@@ -819,6 +974,7 @@ class TextoWidget extends StatelessWidget {
               style: subHeaderTextStyle),
           new Text(" "),
           new Text("DISGENET: ", style: subHeaderTextStyle),
+          new Text(" "),
         ],
       );
     }

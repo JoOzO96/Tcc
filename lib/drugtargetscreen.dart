@@ -6,7 +6,6 @@ import 'package:unidb/Classes/chembl/chembl.dart';
 import 'package:unidb/Classes/chembl/chemblmolecule.dart';
 import 'package:unidb/Classes/drugtarget/bioactivities.dart';
 import 'package:unidb/Classes/drugtarget/drugtargetcommons.dart';
-import 'package:unidb/Classes/pubmed/pubmed.dart';
 import 'package:unidb/chembl.dart';
 import 'package:xml2json/xml2json.dart';
 
@@ -28,6 +27,7 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
   Xml2Json xml2json = new Xml2Json();
   Quimicos chemblMolecule = new Quimicos();
   List<Quimicos> listaMoleculas = new List();
+  List<Quimicos> listaMoleculasSemnome = new List();
   List<Quimicos> listaMoleculasTemp = new List();
 
   bool adicionar = false;
@@ -84,8 +84,11 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
         });
         listaMoleculas.add(chemblMolecule);
       }
+      listaMoleculasSemnome =
+          listaMoleculas.where((p) => p.prefName == "No name").toList();
       listaMoleculas =
           listaMoleculas.where((p) => p.prefName != "No name").toList();
+      
       listaMoleculasTemp = listaMoleculas.toList();
       listaMoleculas.clear();
       for (int i = 0; listaMoleculasTemp.length > i; i++) {
@@ -132,6 +135,15 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
             child: Container(
               child: CustomScrollView(
                 slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        new Center(
+                          child: new Text("Drugs whit Name:"),
+                        ),
+                      ],
+                    ),
+                  ),
                   SliverGrid(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         childAspectRatio: 2, crossAxisCount: 1),
@@ -140,6 +152,36 @@ class DrugTargetScreenState extends State<DrugTargetScreen> {
                       childCount: listaMoleculas.length,
                     ),
                   ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        new Center(
+                          child: new Text("Drugs whitout Name:"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 2, crossAxisCount: 1),
+                    delegate: new SliverChildBuilderDelegate(
+                      (context, index) =>
+                          new ChemblCard(listaMoleculasSemnome[index]),
+                      childCount: listaMoleculasSemnome.length,
+                    ),
+                  ),
+                  // new Center(
+                  //   child: new Text("Drugs whitout Name"),
+                  // ),
+                  // SliverGrid(
+                  //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  //       childAspectRatio: 2, crossAxisCount: 1),
+                  //   delegate: new SliverChildBuilderDelegate(
+                  //     (context, index) =>
+                  //         new ChemblCard(listaMoleculasSemnome[index]),
+                  //     childCount: listaMoleculasSemnome.length,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
